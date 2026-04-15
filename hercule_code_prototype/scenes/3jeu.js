@@ -186,7 +186,7 @@ const neree = add([
     scale(2),
     anchor("bot"),
     body(),
-    area({shape: new Rect(vec2(0,-3),100,50)}),
+    area({shape: new Rect(vec2(0,-3),40,50)}),
     'neree',
 ]);
     // Nérée fait quelques pas, puis il se métamorphose
