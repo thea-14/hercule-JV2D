@@ -29,7 +29,7 @@ gameover.init();
 //win.init();
 
     // Aller au menu (scène 1)
-go('menu');
+go('jardin');
 
     // Ajouter de la gravité (pour les scènes suivantes)
 setGravity(2400);
@@ -49,12 +49,15 @@ loadSprite('chouette', '/assets/Chouette.png', {
         "fly":{from:0, to:3, loop:true},
     },
 });
-loadSprite('serpent', '/assets/Serpent.png', {
-    sliceX: 2,
+loadSprite('Neree', '/assets/Neree_Animations.png', {
+    sliceX: 6,
     sliceY: 1,
     anims:{
-        "move":{from:0, to:1, loop:true},
-    },
+        stand:{from:0, to:0, loop:true},
+        walk:{from:0, to: 1, loop:true},
+        metamorphose:{from:0, to:3, loop:false},
+        serpent:{from:4, to:5, loop:true},
+        },
 });
 loadSprite('boule de feu', '/assets/Boule_Feu.png', {
     sliceX: 2,

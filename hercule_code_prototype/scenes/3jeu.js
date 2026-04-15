@@ -7,27 +7,36 @@ export function init(){
 });
 
 // instructions de jeu
-const instructions_avancer = add([ // pour avancer
+const instructions_neree = add([
+    text(`Nérée vient de s'échapper! Aide-moi à l'attraper.`, {size:24}),
+    pos(100, 500),
+    fixed(),
+]);
+wait(2, () => {
+    instructions_neree.destroy();
+    const instructions_avancer = add([ // pour avancer
     text('Pour avancer, appuie sur la flèche droite.', {size:24}),
     pos(100, 500),
     fixed(),
 ]);
-wait(3, () => {
+
+wait(2, () => {
     instructions_avancer.destroy();
     const instructions_sauter = add([ // pour sauter
         text('Pour sauter, appuie sur "espace".', {size:24}),
         pos(100, 500),
         fixed(),
     ]);
-    wait(3, () => {
+    wait(2, () => {
     instructions_sauter.destroy();
     const instructions_minerve = add([ // pour appeler Minerve
         text('Pour appeler Minerve, appuie sur "m".', {size:24}),
         pos(100, 500),
         fixed(),
     ]);
-    wait(3, () => {
+    wait(2, () => {
     instructions_minerve.destroy();
+});
 });
 });
 });
@@ -77,9 +86,10 @@ jardin();
 
 // ajouter des boules de feu
 function boules_de_feu(){
+    const hauteur = rand(270, 400); // hauteur aléatoire des boules de feu
     const feu = add([
         sprite('boule de feu'),
-        pos(8000, 290),
+        pos(8000, hauteur),
         area({shape: new Rect(vec2(15, 30),65,40)}),
         'feu',
     ]);
@@ -154,7 +164,7 @@ function appelerChouette(){
         chouette.play("fly");
     };
     chouette.onUpdate(() => { // la chouette se déplace en continu
-        chouette.move(400, 0);
+        chouette.move(400, 80); // faire en sorte que la chouette suive Nérée
     });
 };
 
@@ -169,27 +179,46 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
     }; 
 });
 
-// ajouter le serpent (Nérée)
-const serpent = add([
-    sprite('serpent'),
-    pos(1000, 466),
-    scale(3),
+// ajouter Nérée qui se transforme en serpent
+const neree = add([
+    sprite('Neree'),
+    pos(600, 466),
+    scale(2),
     anchor("bot"),
     body(),
-    area({shape: new Rect(vec2(0,4),100,50)}),
-    'serpent',
+    area({shape: new Rect(vec2(0,-3),100,50)}),
+    'neree',
 ]);
-serpent.onUpdate(() => {
-    if(serpent.curAnim() != "move"){
-        serpent.play("move");
-    };
-    serpent.move(300, 0);
+    // Nérée fait quelques pas, puis il se métamorphose
+neree.play("walk");
+wait(2, () => {
+    neree.play("metamorphose");
 });
+    
+let neree_avance = true; // voir collision chouette
+    // vitesse de Nérée
+neree.onUpdate(() => {
+    if(neree_avance){
+        neree.pos.x += 3;
+    };
+});
+    // Nérée se transforme en serpent et reste serpent
+neree.onAnimEnd((anim) => {
+    if(anim == "metamorphose"){
+        neree.play("serpent");
+    };
+});
+
+    // collision Nérée - chouette (quand la chouette attrape le serpent, il redevient Nérée)
+neree.onCollide('chouette', () => {
+    neree_avance = false; // Nérée s'arrête
+    neree.play("stand");
+    });
 
 // ajouter Hercule
     const hercule = add([
         sprite('Hercule'),
-        pos(800, 466),
+        pos(500, 466),
         scale(2),
         anchor("bot"),
         body(),
@@ -198,6 +227,8 @@ serpent.onUpdate(() => {
     ]);
     
     hercule.perdUneVie = false; // voir collision boule de feu
+
+    let afficher_message = false; // un message s'affiche lorsque Hercule aura réussi à sortir de la zone de feu
 
     // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
     hercule.onUpdate(() => {
@@ -209,10 +240,20 @@ serpent.onUpdate(() => {
         if(!hercule.curAnim()){
             hercule.play("stand")
         };
+        // si Hercule est sorti de la zone de feu, alors afficher le message
+        if (hercule.pos.x > 8000 && !afficher_message){
+            afficher_message = true;
+            add([
+                text("Bravo! Grâce à toi, j'ai réussi à esquiver les boules de feu du dragon Ladon!", {size:18}),
+                pos(60, 500),
+                fixed(),
+            ]);
+        };
     });
 
 // Tourner à droite et à gauche: pas obligatoire si Hercule se déplace en continu
     // Hercule tourne à droite
+    wait(1, () => { // Hercule ne peut pas avancer le temps des instructions
     onKeyDown("right", () => {
         if(hercule.perdUneVie) return; // si Hercule est touché par une boule de feu, alors il ne peut plus avancer pendant 0.25 sec
         hercule.pos.x += 5;
@@ -226,6 +267,7 @@ serpent.onUpdate(() => {
     });
     onKeyRelease("right", () => {
         hercule.play("stand")
+    });
     });
 
     // Hercule saute
@@ -297,3 +339,4 @@ hercule.onCollide('feu', (feu) => {
     });
 });
 };
+

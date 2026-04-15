@@ -46,11 +46,21 @@ jardin();
         consigne.destroy();
     });
     
+    // ligne pour la gravité
+const ligne = add([
+    rect(100000, 2),
+    area(),
+    body({isStatic: true}),
+    pos(0, 460),
+    opacity(0),
+]);
+    
     // ajouter Hercule de face
     const hercule = add([
         sprite('Hercule', {frame: 5}),
-        pos(270, 270),
+        pos(500, 466),
         scale(2),
+        anchor("bot"),
         area(),
     ]);
         
