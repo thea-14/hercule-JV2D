@@ -6,41 +6,6 @@ export function init(){
     setFullscreen(!isFullscreen());
 });
 
-// instructions de jeu
-const instructions_neree = add([
-    text(`Nérée vient de s'échapper! Aide-moi à l'attraper.`, {size:24}),
-    pos(100, 500),
-    fixed(),
-]);
-wait(2, () => {
-    instructions_neree.destroy();
-    const instructions_avancer = add([ // pour avancer
-    text('Pour avancer, appuie sur la flèche droite.', {size:24}),
-    pos(100, 500),
-    fixed(),
-]);
-
-wait(2, () => {
-    instructions_avancer.destroy();
-    const instructions_sauter = add([ // pour sauter
-        text('Pour sauter, appuie sur "espace".', {size:24}),
-        pos(100, 500),
-        fixed(),
-    ]);
-    wait(2, () => {
-    instructions_sauter.destroy();
-    const instructions_minerve = add([ // pour appeler Minerve
-        text('Pour appeler Minerve, appuie sur "m".', {size:24}),
-        pos(100, 500),
-        fixed(),
-    ]);
-    wait(2, () => {
-    instructions_minerve.destroy();
-});
-});
-});
-});
-
 // ligne pour la gravité
 const ligne = add([
     rect(100000, 2),
@@ -157,14 +122,19 @@ function appelerChouette(){
     scale(1.5),
     anchor("bot"),
     body({gravityScale: 0}),
-    area(),
+    area({shape: new Rect(vec2(10,-18),70,50)}),
     'chouette',
 ]);
     if(chouette.curAnim() != "fly"){
         chouette.play("fly");
     };
     chouette.onUpdate(() => { // la chouette se déplace en continu
-        chouette.move(400, 80); // faire en sorte que la chouette suive Nérée
+        chouette.move(400, 70); // la chouette se déplace en diagonale vers le bas
+    });
+    // collision chouette - boule de feu
+    chouette.onCollide('feu', (feu) => {
+        feu.destroy();
+        chouette.destroy();
     });
 };
 
@@ -178,42 +148,6 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
         compteur_chouettes.text = "";
     }; 
 });
-
-// ajouter Nérée qui se transforme en serpent
-const neree = add([
-    sprite('Neree'),
-    pos(600, 466),
-    scale(2),
-    anchor("bot"),
-    body(),
-    area({shape: new Rect(vec2(0,-3),40,50)}),
-    'neree',
-]);
-    // Nérée fait quelques pas, puis il se métamorphose
-neree.play("walk");
-wait(2, () => {
-    neree.play("metamorphose");
-});
-    
-let neree_avance = true; // voir collision chouette
-    // vitesse de Nérée
-neree.onUpdate(() => {
-    if(neree_avance){
-        neree.pos.x += 3;
-    };
-});
-    // Nérée se transforme en serpent et reste serpent
-neree.onAnimEnd((anim) => {
-    if(anim == "metamorphose"){
-        neree.play("serpent");
-    };
-});
-
-    // collision Nérée - chouette (quand la chouette attrape le serpent, il redevient Nérée)
-neree.onCollide('chouette', () => {
-    neree_avance = false; // Nérée s'arrête
-    neree.play("stand");
-    });
 
 // ajouter Hercule
     const hercule = add([
@@ -253,7 +187,6 @@ neree.onCollide('chouette', () => {
 
 // Tourner à droite et à gauche: pas obligatoire si Hercule se déplace en continu
     // Hercule tourne à droite
-    wait(1, () => { // Hercule ne peut pas avancer le temps des instructions
     onKeyDown("right", () => {
         if(hercule.perdUneVie) return; // si Hercule est touché par une boule de feu, alors il ne peut plus avancer pendant 0.25 sec
         hercule.pos.x += 5;
@@ -267,7 +200,6 @@ neree.onCollide('chouette', () => {
     });
     onKeyRelease("right", () => {
         hercule.play("stand")
-    });
     });
 
     // Hercule saute
@@ -337,6 +269,48 @@ hercule.onCollide('feu', (feu) => {
             hercule.play("stand");
         });
     });
+
+// ajouter Nérée qui se transforme en serpent
+const neree = add([
+    sprite('Neree'),
+    pos(9000, 466),
+    scale(2),
+    anchor("bot"),
+    body(),
+    area({shape: new Rect(vec2(0,-3),40,50)}),
+    'neree',
+]);
+
+    // Nérée est immobile et face à Hercule
+    neree.play("stand");
+    neree.flipX = true;
+    let neree_avance = false; // voir collision chouette
+    let seuil = false; // seuil où Hercule entre dans le champ de vision de Nérée
+    
+    neree.onUpdate(() => {
+        if(!seuil && (hercule.pos.x < neree.pos.x && hercule.pos.x > neree.pos.x - 300)){
+            seuil = true; // on a atteint le seuil
+                neree.flipX = false;
+                neree_avance = true;
+                neree.play("walk");
+                wait(2, () => { // Nérée se métamorphose après 2 secondes de marche
+                    neree_avance = true;
+                    neree.play("metamorphose");
+                });
+                neree.onAnimEnd((anim) => { // Nérée se transforme en serpent et reste serpent
+                    if(anim == "metamorphose"){
+                        neree.play("serpent");
+                    };
+                });
+        };
+        if(neree_avance){
+            neree.pos.x += 5; // vitesse de Nérée
+        };
+    });
+
+    
+
+ 
 });
 };
 
