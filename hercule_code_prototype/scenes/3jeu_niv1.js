@@ -1,22 +1,7 @@
-// SCÈNE JARDIN (JEU)
-export function init(){
-    scene('jardin', () => {
-    setBackground(0,0,0); // fond noir
-    onKeyPress("f", (c) => { // mode plein écran
-    setFullscreen(!isFullscreen());
-});
-
-// ligne pour la gravité
-const ligne = add([
-    rect(100000, 2),
-    area(),
-    body({isStatic: true}),
-    pos(0, 460),
-    opacity(0),
-]);
+// SCÈNE JARDIN (JEU) NIVEAU 1
 
 // créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
-function jardin(){
+export function jardin(){
     // créer une fonction pomme
     function pomme(x, y){
     return add([
@@ -47,6 +32,25 @@ function jardin(){
         pomme(800 * i - 230, 280);
     };
 };
+
+// exporter la scène "jardin"
+export function init(){
+    scene('jardin', () => {
+    setBackground(0,0,0); // fond noir
+    onKeyPress("f", (c) => { // mode plein écran
+    setFullscreen(!isFullscreen());
+});
+
+// ligne pour la gravité
+const ligne = add([
+    rect(100000, 2),
+    area(),
+    body({isStatic: true}),
+    pos(0, 460),
+    opacity(0),
+]);
+
+// ajouter le décor
 jardin();
 
 // ajouter des boules de feu
@@ -162,7 +166,6 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
     
     hercule.perdUneVie = false; // voir collision boule de feu
 
-    let afficher_message = false; // un message s'affiche lorsque Hercule aura réussi à sortir de la zone de feu
 
     // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
     hercule.onUpdate(() => {
@@ -174,14 +177,9 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
         if(!hercule.curAnim()){
             hercule.play("stand")
         };
-        // si Hercule est sorti de la zone de feu, alors afficher le message
-        if (hercule.pos.x > 8000 && !afficher_message){
-            afficher_message = true;
-            add([
-                text("Bravo! Grâce à toi, j'ai réussi à esquiver les boules de feu du dragon Ladon!", {size:18}),
-                pos(60, 500),
-                fixed(),
-            ]);
+        // si Hercule est sorti de la zone de feu, alors on passe au niveau suivant
+        if (hercule.pos.x > 8500){
+            go('jeu2');
         };
     });
 
@@ -308,9 +306,16 @@ const neree = add([
         };
     });
 
-    
+    // collision Nérée - chouette (quand la chouette attrape le serpent, il redevient Nérée)
+    neree.onCollide('chouette', (chouette) => {
+        neree_avance = false; // Nérée s'arrête
+        neree.play("stand");
+        chouette.destroy();
+    });
+
+    // collision Nérée - Hercule (quand Hercule attrape Nérée, le partie est gagnée)
 
  
-});
-};
+}); // fin de la scène
+}; // fin de la fonction
 

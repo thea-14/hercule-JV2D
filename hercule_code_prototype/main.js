@@ -2,7 +2,8 @@
     // Importer les scènes
 import * as menu from "./scenes/1menu.js";
 import * as histoire from "./scenes/2histoire.js";
-import * as jeu from "./scenes/3jeu.js";
+import * as jeu1 from "./scenes/3jeu_niv1.js";
+import * as jeu2 from "./scenes/3jeu_niv2.js";
 import * as gameover from "./scenes/4gameover.js";
 //import * as win from "./scenes/5win.js";
 
@@ -24,7 +25,8 @@ loquace.init();
     // Initialiser les scènes
 menu.init();
 histoire.init();
-jeu.init();
+jeu1.init();
+jeu2.init();
 gameover.init();
 //win.init();
 

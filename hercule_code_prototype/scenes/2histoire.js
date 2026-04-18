@@ -1,40 +1,11 @@
 // SCÈNE HISTOIRE
+import {jardin} from "./3jeu_niv1.js";
+
 export function init(){
     scene('histoire', () => {
     setBackground(BLACK);
 
     // ajouter le décor
-    function jardin(){
-    // créer une fonction pomme
-        function pomme(x, y){
-        return add([
-            sprite('pomme'),
-            pos(x, y),
-            area({shape: new Rect(vec2(30,30),40,40)}),
-            'pomme',
-        ]);
-    };
-    // répéter le même décor
-    for (let i = 0; i < 100; i++){
-        add([
-            sprite('jardin'),
-            pos(800 * i, 0),
-        ]);
-    // ajouter des pommes
-        // 1er arbre
-        pomme(800 * i - 760, 150);
-        pomme(800 * i - 670, 260);
-        pomme(800 * i - 780, 300);
-        // 2e arbre
-        pomme(800 * i - 400, 200);
-        pomme(800 * i - 500, 250);
-        pomme(800 * i - 460, 150);
-        // 3e arbre
-        pomme(800 * i - 170, 100);
-        pomme(800 * i - 120, 210);
-        pomme(800 * i - 230, 280);
-    };
-};
 jardin();
     
     // ajouter la consigne
@@ -45,7 +16,7 @@ jardin();
     wait(3, () => {
         consigne.destroy();
     });
-    
+
     // ligne pour la gravité
 const ligne = add([
     rect(100000, 2),
@@ -54,7 +25,6 @@ const ligne = add([
     pos(0, 460),
     opacity(0),
 ]);
-    
     // ajouter Hercule de face
     const hercule = add([
         sprite('Hercule', {frame: 5}),
@@ -63,6 +33,7 @@ const ligne = add([
         anchor("bot"),
         area(),
     ]);
+    
         
     // faire parler Hercule
     let taper_espace = 0; // compteur pour les répliques d'Hercule
