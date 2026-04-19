@@ -178,9 +178,9 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
             hercule.play("stand")
         };
         // si Hercule est sorti de la zone de feu, alors on passe au niveau suivant
-        if (hercule.pos.x > 8500){
-            go('jeu2');
-        };
+        //if (hercule.pos.x > 8500){
+            //go('jeu2');
+        //};
     });
 
 // Tourner à droite et à gauche: pas obligatoire si Hercule se déplace en continu
@@ -314,6 +314,9 @@ const neree = add([
     });
 
     // collision Nérée - Hercule (quand Hercule attrape Nérée, le partie est gagnée)
+    neree.onCollide('hercule', () => {
+        go('win');
+    });
 
  
 }); // fin de la scène

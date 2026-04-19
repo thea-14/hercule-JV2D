@@ -5,7 +5,7 @@ import * as histoire from "./scenes/2histoire.js";
 import * as jeu1 from "./scenes/3jeu_niv1.js";
 import * as jeu2 from "./scenes/3jeu_niv2.js";
 import * as gameover from "./scenes/4gameover.js";
-//import * as win from "./scenes/5win.js";
+import * as win from "./scenes/5win.js";
 
     // Importer Kaplay et Loquace
 import kaplay from "https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs";
@@ -28,10 +28,10 @@ histoire.init();
 jeu1.init();
 jeu2.init();
 gameover.init();
-//win.init();
+win.init();
 
     // Aller au menu (scène 1)
-go('jardin');
+go('menu');
 
     // Ajouter de la gravité (pour les scènes suivantes)
 setGravity(2400);
@@ -40,6 +40,7 @@ setGravity(2400);
     // Charger les sprites
 loadSprite('titre', '/assets/Titre_Final.png');
 loadSprite('jardin', '/assets/Jardin_Hesperides.png');
+loadSprite('sortie jardin', '/assets/Jardin_Sortie.png');
 loadSprite('pomme', '/assets/pomme_feuilles.png');
 loadSprite('pomme entière', '/assets/Pomme.png');
 loadSprite('coeur', '/assets/Coeur.png');
@@ -69,7 +70,7 @@ loadSprite('boule de feu', '/assets/Boule_Feu.png', {
     },
 });
 loadSprite('Hercule', '/assets/Hercule_Animations.png', {
-    sliceX: 7,
+    sliceX: 8,
     sliceY: 1,
     anims:{
         "stand":{from: 0, to: 0, loop: true},
@@ -79,6 +80,7 @@ loadSprite('Hercule', '/assets/Hercule_Animations.png', {
         "burn":{from: 4, to: 4, loop:true},
         "talk":{from: 5, to: 6, loop:true},
         "face":{from: 5, to: 5, loop: true},
+        "happy":{from: 7, to: 7, loop: true},
     },
 });
 
