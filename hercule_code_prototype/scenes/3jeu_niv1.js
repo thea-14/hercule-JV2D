@@ -229,7 +229,7 @@ hercule.onCollide('pomme', (pomme) => {
     score_pommes += 1; // on met à jour le nombre de pommes récoltées
     compteur_pommes.text = score_pommes; // le compteur affiche le nombre de pommes récoltées
 
-    if(score_pommes % 10 == 0){ // chaque fois qu'Hercule récolte 10 pommes, une chouette est ajoutée au stock
+    if(score_pommes % 30 == 0){ // chaque fois qu'Hercule récolte 30 pommes, une chouette est ajoutée au stock
         stock_chouettes += 1;
         compteur_chouettes.text = stock_chouettes;
     };
