@@ -22,6 +22,7 @@ kaplay({
 });
 loquace.init();
 
+
     // Initialiser les scènes
 menu.init();
 histoire.init();
@@ -31,7 +32,7 @@ gameover.init();
 win.init();
 
     // Aller au menu (scène 1)
-go('menu');
+go('jardin');
 
     // Ajouter de la gravité (pour les scènes suivantes)
 setGravity(2400);
@@ -83,5 +84,4 @@ loadSprite('Hercule', '/assets/Hercule_Animations.png', {
         "happy":{from: 7, to: 7, loop: true},
     },
 });
-
 

@@ -1,4 +1,5 @@
 // SCÈNE JARDIN (JEU) NIVEAU 1
+let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
 
 // créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
 export function jardin(){
@@ -41,6 +42,7 @@ export function init(){
     setFullscreen(!isFullscreen());
 });
 
+
 // ligne pour la gravité
 const ligne = add([
     rect(100000, 2),
@@ -63,6 +65,10 @@ function boules_de_feu(){
         'feu',
     ]);
     feu.onUpdate(() => {
+        if(DIALOGUE){
+            feu.destroy();
+            return;
+        };  // lors de la pause narrative, les boules de feu s'arrêtent
         if(feu.curAnim() != "move"){
             feu.play("move");
         };
@@ -71,6 +77,7 @@ function boules_de_feu(){
 };
 
 loop(3, () => { // boucle: toutes les 3 sec, une boule de feu est lancée
+    if(DIALOGUE) return; // lors de la pause narrative, les boules de feu s'arrêtent
     boules_de_feu();
 });
 
@@ -169,6 +176,7 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 
     // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
     hercule.onUpdate(() => {
+        if(!DIALOGUE){
         if(hercule.isGrounded()){
             setCamPos(hercule.pos.x, hercule.pos.y - 170);
         } else {
@@ -178,14 +186,30 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
             hercule.play("stand")
         };
         // si Hercule est sorti de la zone de feu, alors on passe au niveau suivant
-        //if (hercule.pos.x > 8500){
-            //go('jeu2');
-        //};
+        if (hercule.pos.x > 1000 && !DIALOGUE){
+            DIALOGUE = true;
+            onButtonPress('space', loquace.next);
+            loquace.script([
+                "Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
+                "J'ai récolté assez de pommes pour en ramener trois à Eurysthée.",
+                "Il ne me reste plus qu'à attraper Nérée pour sortir du jardin.",
+                "Tu le reconnaîtras facilement: dès qu'il me verra, il se transformera en serpent.",
+                "Au premier abord, on dirait un vieux monsieur... mais c'est un dieu très malin!",
+                "Lorsqu'il se transformera en serpent, il sera trop rapide pour que je puisse l'attraper.",
+                "Heureusement qu'il y a Minerve! Une chouette peut voler très vite et voir très loin. C'est une chasseuse redoutable!",
+                "Une fois que Nérée sera redevenu humain, je pourrai l'attraper.",
+                "Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
+            ]);
+        };
+    };
     });
+    
+    
 
 // Tourner à droite et à gauche: pas obligatoire si Hercule se déplace en continu
     // Hercule tourne à droite
     onKeyDown("right", () => {
+        if(DIALOGUE) return; // lors de la pause narrative, Hercule ne peut plus avancer
         if(hercule.perdUneVie) return; // si Hercule est touché par une boule de feu, alors il ne peut plus avancer pendant 0.25 sec
         hercule.pos.x += 5;
         hercule.flipX = false;
@@ -202,6 +226,7 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 
     // Hercule saute
   onKeyPress("space", () => {
+    if(DIALOGUE) return; // lors de la pause narrative, Hercule nepeut plus sauter
     if(hercule.perdUneVie) return;
     if(hercule.curAnim != "jump"){
         hercule.play("jump");
@@ -245,6 +270,8 @@ hercule.onCollide('pomme', (pomme) => {
         plus_un.destroy();
     });
     destroy(pomme);
+
+    const son = play('plus un'); // ajout de la musique
 });
 
 // collision Hercule - boule de feu

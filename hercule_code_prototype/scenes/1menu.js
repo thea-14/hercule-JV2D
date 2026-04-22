@@ -28,6 +28,15 @@ export function init(){
     // ajouter un événement au bouton
     onKeyPress('space', () => {
         go('histoire');
-    });
+        // ajouter la musique de fond
+const musique = play('musique', {
+    volume: 0.8,
+    speed: 1.0,
+    loop: true,
 });
-};
+    });
+    
+    
+
+}); // fin de la scène
+}; // fin de la fonction
