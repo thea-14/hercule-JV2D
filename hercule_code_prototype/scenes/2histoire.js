@@ -1,6 +1,12 @@
 // SCÈNE HISTOIRE
 import {jardin} from "./3jeu_niv1.js";
 
+export function musique(){
+    const musique = play('musique de fond', {
+        volume: 0.6,
+    });
+};
+
 export function init(){
     scene('histoire', () => {
     setBackground(BLACK);
@@ -34,6 +40,7 @@ const ligne = add([
         taper_espace += 1;
         if(taper_espace == 25){ // quand les x répliques sont passées, on commence le jeu
             go('jardin');
+            musique();
         };
     });
     onKeyRelease('space', () => {

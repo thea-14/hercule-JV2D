@@ -1,4 +1,7 @@
 // SCÈNE JARDIN (JEU) NIVEAU 1
+import { musique } from "./2histoire.js";
+
+
 let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
 
 // créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
@@ -186,20 +189,21 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
             hercule.play("stand")
         };
         // si Hercule est sorti de la zone de feu, alors on passe au niveau suivant
-        if (hercule.pos.x > 1000 && !DIALOGUE){
-            DIALOGUE = true;
-            onButtonPress('space', loquace.next);
-            loquace.script([
-                "Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
-                "J'ai récolté assez de pommes pour en ramener trois à Eurysthée.",
-                "Il ne me reste plus qu'à attraper Nérée pour sortir du jardin.",
-                "Tu le reconnaîtras facilement: dès qu'il me verra, il se transformera en serpent.",
-                "Au premier abord, on dirait un vieux monsieur... mais c'est un dieu très malin!",
-                "Lorsqu'il se transformera en serpent, il sera trop rapide pour que je puisse l'attraper.",
-                "Heureusement qu'il y a Minerve! Une chouette peut voler très vite et voir très loin. C'est une chasseuse redoutable!",
-                "Une fois que Nérée sera redevenu humain, je pourrai l'attraper.",
-                "Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
-            ]);
+        if (hercule.pos.x > 8300 && !DIALOGUE){
+            //DIALOGUE = true;
+            //onButtonPress('space', loquace.next);
+            //loquace.script([
+                //"Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
+                //"J'ai récolté assez de pommes pour en ramener trois à Eurysthée.",
+                //"Il ne me reste plus qu'à attraper Nérée pour sortir du jardin.",
+                //"Tu le reconnaîtras facilement: dès qu'il me verra, il se transformera en serpent.",
+                //"Au premier abord, on dirait un vieux monsieur... mais c'est un dieu très malin!",
+                //"Lorsqu'il se transformera en serpent, il sera trop rapide pour que je puisse l'attraper.",
+                //"Heureusement qu'il y a Minerve! Une chouette peut voler très vite et voir très loin. C'est une chasseuse redoutable!",
+                //"Une fois que Nérée sera redevenu humain, je pourrai l'attraper.",
+                //"Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
+            //]);
+            go('jeu2');
         };
     };
     });
@@ -226,6 +230,9 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 
     // Hercule saute
   onKeyPress("space", () => {
+    const son = play('saut', {
+        volume: 0.7
+    }); 
     if(DIALOGUE) return; // lors de la pause narrative, Hercule nepeut plus sauter
     if(hercule.perdUneVie) return;
     if(hercule.curAnim != "jump"){
@@ -251,6 +258,9 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 
 // collision Hercule - pomme
 hercule.onCollide('pomme', (pomme) => {
+    const son = play('plus un',{
+        volume: 0.5,
+    });
     score_pommes += 1; // on met à jour le nombre de pommes récoltées
     compteur_pommes.text = score_pommes; // le compteur affiche le nombre de pommes récoltées
 
@@ -270,12 +280,19 @@ hercule.onCollide('pomme', (pomme) => {
         plus_un.destroy();
     });
     destroy(pomme);
-
-    const son = play('plus un'); // ajout de la musique
 });
 
 // collision Hercule - boule de feu
+let total_boules_de_feu = 0;
+
 hercule.onCollide('feu', (feu) => {
+    total_boules_de_feu += 1;
+    if(total_boules_de_feu < 3){ // pour les 2 premières boules de feu, son d'impact; pour la dernière, son game over (voir infra)
+        const son = play('hit', {
+            volume: 0.6,
+        }); 
+    };
+
     if(coeurs.length > 0){ // on enlève une vie au compteur
         destroy(coeurs.pop());
     }; 
@@ -286,6 +303,9 @@ hercule.onCollide('feu', (feu) => {
     destroy(feu);
 
     if(coeurs.length == 0){ // s'il n'y a plus de vies, alors game over
+        const son = play('game over', {
+            volume: 0.6,
+        });
         go('game over');
     };
 

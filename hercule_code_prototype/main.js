@@ -32,7 +32,7 @@ gameover.init();
 win.init();
 
     // Aller au menu (scène 1)
-go('jardin');
+go('histoire');
 
     // Ajouter de la gravité (pour les scènes suivantes)
 setGravity(2400);
@@ -85,3 +85,9 @@ loadSprite('Hercule', '/assets/Hercule_Animations.png', {
     },
 });
 
+    // Charger les sons
+loadSound('plus un', '/sounds/coin1.wav');
+loadSound('saut', '/sounds/jump_11.wav');
+loadSound('hit', '/sounds/death.wav');
+loadSound('game over', '/sounds/round_end.wav');
+loadSound('musique de fond', '/sounds/sunnyday.wav');
