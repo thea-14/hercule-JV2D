@@ -19,6 +19,7 @@ export {
   clear,
   pop,
   vn,
+  popChoice
 };
 
 // Allow use of loquace as a KAPLAY plugin
@@ -36,6 +37,7 @@ function loquacePlugin() {
       clear,
       pop,
       vn,
+      popChoice
     },
   };
 }
@@ -51,15 +53,15 @@ const config = {
 
   // Default values for pop dialog
   pop: {
-    position: "topleft",
+    position: "bot",
     sideImage: {
       options: {
         // For the sprite object
-        width: 60,
+        width: 120,
       },
     },
     textBox: {
-      width: 450,
+      width: 650,
       margin: 20, // FIXME: Should this also be an object with top, right, bottom, left ?
       padding: {
         top: 15,
@@ -67,6 +69,7 @@ const config = {
         bottom: 15,
         left: 20,
       },
+      color:{r:213, g:233, b:243},
       options: {
         // For the rect object
         radius: 15,
@@ -76,17 +79,22 @@ const config = {
       offsetX: 1,
       options: {
         // For the text object
-        size: 20,
-        letterSpacing: 10,
+        size: 18,
+        letterSpacing: 2,
         lineSpacing: 10,
-        width: 350,
+        width: 570,
+        align:"center"
       },
+      // color:[0,0,0]
     },
     nextPrompt: {
       name: "right-arrow",
       options: {
         width: 20,
       },
+    },
+    dialogOutline:{
+      color:[0,0,0]
     },
     doTween: true,
   },
@@ -128,6 +136,9 @@ const config = {
         width: 20,
       },
     },
+    dialogOutline:{
+      color:[0,0,0]
+    },
     doTween: true,
   },
 };
@@ -161,7 +172,7 @@ function characters(c) {
   Object.assign(_characters, c);
 }
 
-function script(s, auto = true) {
+function script(s, auto = true, offset=(0,0)) {
   // → If an object is passed, the behavior is like Monogatari:
   // The object passed is a 'script' which is a list of keys ('labels'),
   // containing an array of strings ('statements').
@@ -181,7 +192,7 @@ function script(s, auto = true) {
     // Reset statement counter
     statementCounter = 0;
 
-    if (auto) next();
+    if (auto) next(offset);
   } else {
     // Merge new script with existing script
     Object.assign(_script, s);
@@ -200,17 +211,19 @@ function start(label, auto = true) {
 }
 
 // Display next statement
-function next() {
+function next(camPos={x:0,y:0}) {
   // Fail silently if no script for current label
   if (!statements) return false;
 
   // Clear and return if no more statements
   if (statementCounter > statements.length - 1) {
+    //play("bubblepop", {volume:0.3})
     clear();
     return false;
   }
 
   // First remove any existing dialog
+  //play("bubblepop")
   clear();
 
   // Parse statement
@@ -221,13 +234,13 @@ function next() {
 
   // Execute and display dialog (deferred after statementCounter increment)
   executeCommands(dialogObject.commands);
-  displayDialog(dialogObject);
+  displayDialog(dialogObject,{offset:camPos});
 
   return true;
 }
 
 // Parse a statement and return a dialog object
-function parse(statement, execute = true) {
+function parse(statement, execute = true, camPos={x:0,y:0}) {
   const dialogObject = {
     originalStatement: statement,
     statement: "",
@@ -240,7 +253,7 @@ function parse(statement, execute = true) {
 
   if (execute) {
     executeCommands(dialogObject);
-    displayDialog(dialogObject);
+    displayDialog(dialogObject, {offset:camPos});
   }
 
   return dialogObject;
@@ -364,27 +377,29 @@ function executeCommands(commands) {
   });
 }
 
-function displayDialog(dialogObject) {
+function displayDialog(dialogObject, option={}) {
   // Do not display anything if statement is empty (e.g. if it was only a command)
   if (dialogObject.statement === "") return;
 
   // Display dialog by type
   switch (_characters[dialogObject.who].dialogType) {
-    case "vn":
-      // Traditional visual novel dialog box at the bottom of the screen
-      vn(
-        dialogObject.statement,
-        deepMerge(
-          config.vn,
-          {
-            name: _characters[dialogObject.who].name,
-            sideImage: { name: dialogObject.sideImage },
-          },
-          _characters[dialogObject.who].dialogOptions || {}
-        )
-      );
-      break;
+    // case "vn":
+    //   console.log("Offset vn",option.offset)
+    //   // Traditional visual novel dialog box at the bottom of the screen
+    //   vn(
+    //     dialogObject.statement,
+    //     deepMerge(
+    //       config.vn,
+    //       {
+    //         name: _characters[dialogObject.who].name,
+    //         sideImage: { name: dialogObject.sideImage },
+    //       },
+    //       _characters[dialogObject.who].dialogOptions || {}
+    //     )
+    //   );
+    //   break;
     default:
+      console.log("Offset",option.offset)
       // Positionable dialog pop-up or pop-down
       pop(
         dialogObject.statement,
@@ -392,9 +407,10 @@ function displayDialog(dialogObject) {
           config.pop,
           {
             name: _characters[dialogObject.who].name,
-            position: _characters[dialogObject.who].position
-              ? _characters[dialogObject.who].position
-              : config.pop.position, // NOTE: Optional shorthand for dialogOptions.position
+            offset: option.offset,
+            // position: _characters[dialogObject.who].position
+            //   ? _characters[dialogObject.who].position
+            //   : config.pop.position, // NOTE: Optional shorthand for dialogOptions.position
             sideImage: { name: dialogObject.sideImage },
           },
           _characters[dialogObject.who].dialogOptions || {}
@@ -422,7 +438,6 @@ function clear() {
 function pop(string, options = {}) {
   // Deep merge options with default config
   const conf = deepMerge(config.pop, options);
-
   // Calculate base textBox height (will be adjusted for dialog height later)
   const baseTextboxHeight =
     conf.dialogText.options.size +
@@ -433,8 +448,8 @@ function pop(string, options = {}) {
 
   switch (conf.position) {
     case "topleft":
-      xPos = conf.textBox.margin;
-      yPos = conf.textBox.margin;
+      xPos = conf.textBox.margin+conf.offset.x;
+      yPos = conf.textBox.margin+conf.offset.y;
       startyPos = -baseTextboxHeight;
       break;
     case "top":
@@ -453,7 +468,7 @@ function pop(string, options = {}) {
       startyPos = yPos;
       break;
     case "center":
-      xPos = (width() - conf.textBox.width) / 2;
+      xPos = ((conf.offset?.x || 0) - conf.textBox.width/2);
       yPos = height() / 2;
       startyPos = yPos;
       break;
@@ -468,8 +483,8 @@ function pop(string, options = {}) {
       startyPos = height() + baseTextboxHeight;
       break;
     case "bot":
-      xPos = (width() - conf.textBox.width) / 2;
-      yPos = height() - conf.textBox.margin;
+      xPos = (conf.offset?.x || 0) - conf.textBox.width/2;
+      yPos = (conf.offset?.y || 0) + 250;
       startyPos = height() + baseTextboxHeight;
       break;
     case "botright":
@@ -477,33 +492,47 @@ function pop(string, options = {}) {
       yPos = height() - conf.textBox.margin;
       startyPos = height() + baseTextboxHeight;
       break;
+    case "choice":
+      xPos = (conf.offset?.x || 0) + conf.textBox.width*2;
+      yPos = (conf.offset?.y || 0);
+      startyPos = height() + baseTextboxHeight;
+      break;
     default:
-      xPos = conf.textBox.margin;
-      yPos = conf.textBox.margin;
-      startyPos = -baseTextboxHeight;
+      xPos = (conf.offset?.x || 0) - conf.textBox.width/2;
+      yPos = (conf.offset?.y || 0) + 300;
+      startyPos = (conf.offset?.y || height()) + baseTextboxHeight +50;
+      // xPos = conf.textBox.margin;
+      // yPos = conf.textBox.margin;
+      // startyPos = -baseTextboxHeight;
   }
-
   const textBoxObj = add([
     rect(conf.textBox.width, baseTextboxHeight, conf.textBox.options),
-    color(conf.textBox.color ? Object.values(conf.textBox.color) : WHITE),
     pos(xPos, startyPos),
     opacity(conf.doTween ? 0 : 1),
+    color(Object.values(conf.textBox.color)),
+    // color(Object.values({r:150,g:30,b:10})),
+    outline(2,conf.dialogOutline.color),
     "loquaceDialog",
+    z(5)
   ]);
-
+  console.log(conf.dialogText.color)
   if (conf.persistent) textBoxObj.tag("persistent");
 
   if (conf.sideImage.name) {
     textBoxObj.add([
       sprite(conf.sideImage.name, conf.sideImage.options),
-      pos(-conf.textBox.padding.top, -conf.textBox.padding.left),
+      pos(0,0),
+      color(rgb(conf.textBox.color)),
+      // pos(-conf.textBox.padding.top, -conf.textBox.padding.left),
       opacity(1),
+      z(5)
     ]);
   }
 
   const textObj = textBoxObj.add([
     text(string, conf.dialogText.options),
     color(conf.dialogText.color ? Object.values(conf.dialogText.color) : BLACK),
+    //color(BLACK),
     pos(
       conf.sideImage.name
         ? conf.sideImage.options.width
@@ -511,6 +540,7 @@ function pop(string, options = {}) {
       conf.textBox.padding.top + conf.dialogText.offsetX
     ),
     opacity(1),
+    z(5)
   ]);
 
   // Adjust textBoxObj for dialog height
@@ -536,6 +566,7 @@ function pop(string, options = {}) {
       anchor("center"),
       opacity(1),
       animate(),
+      z(5)
     ]);
     nextPromptSprite.animate("scale", [vec2(1.2), vec2(1)], {
       duration: 0.5,
@@ -597,7 +628,7 @@ function vn(string, options = {}) {
       baseTextboxHeight,
       conf.textBox.options
     ),
-    color(conf.textBox.color ? Object.values(conf.textBox.color) : WHITE),
+    color(rgb(Object.values(conf.textBox.color))),
     pos(
       sideImageOffset + conf.textBox.margin,
       conf.doTween
@@ -619,6 +650,7 @@ function vn(string, options = {}) {
         -conf.sideImage.options.width + baseTextboxHeight
       ),
       opacity(1),
+      z(5)
     ]);
   }
 
@@ -637,6 +669,7 @@ function vn(string, options = {}) {
       conf.textBox.padding.top + conf.dialogText.offsetX
     ),
     opacity(1),
+    z(5)
   ]);
 
   // Adjust textbox for textObj height
@@ -666,6 +699,7 @@ function vn(string, options = {}) {
       anchor("center"),
       opacity(1),
       animate(),
+      z(5)
     ]);
     nextPromptSprite.animate("scale", [vec2(1.2), vec2(1)], {
       duration: 0.5,
@@ -695,6 +729,100 @@ function vn(string, options = {}) {
 
   return textBoxObj; // Allow for further manipulation and/or custom tweening
 }
+// Après une tentative d'implémenter moi-même la fonction, j'ai été poussé par le temps et
+// mon inaptitude à demander de l'aide à une IA dont voici le prompt:
+// "Comment ferais tu pour créer une fonction qui afficherait une fenêtre de choix en kaplay ? j'ai une fonction pour afficher du texte qui fonctionne bien (pop), j'ai essayé avec popChoice de le faire, mais ça ne fonctionne pas correctement... [code de ce que j'avais essayé de faire]"
+function popChoice(choices, options = {}) {
+  // Configuration avec fonction callback non clonée
+  const conf = {
+      position: "choice",
+      textBox:{width:110, margin:10, padding:{right: 0, left:0}},
+      dialogText:{options:{width:80}},
+      selectedIndex: 0,
+      showNextPrompt:false,
+      onSelect: (choice, index) => {},
+      ...options // Évite deepMerge pour préserver les fonctions
+  };
+
+  let currentIndex = conf.selectedIndex;
+  let textBoxObj = null;
+  let active = true;
+  const unsubscribers = [];  // Renommé pour plus de clarté
+
+  function cleanUp() {
+      if (!active) return;
+      active = false;
+      
+      if (textBoxObj) {
+          destroy(textBoxObj);
+          textBoxObj = null;
+      }
+      
+      unsubscribers.forEach(unsub => unsub());
+      unsubscribers.length = 0;
+  }
+
+  // Stockage des nettoyages d'écouteurs
+  const keyCleanups = [];
+
+  // Enregistrement des touches
+  function registerKey(key, action) {
+      const cleanup = onKeyPress(key, action);
+      keyCleanups.push(cleanup);
+      return cleanup;
+  }
+
+  // Mise à jour de l'affichage
+  function updateDisplay() {
+      if (!active) return;
+      
+      // Supprimer l'ancienne boîte si elle existe
+      if (textBoxObj) {
+          destroy(textBoxObj);
+      }
+
+      play("choose")
+      // Créer le texte des choix
+      const choicesText = choices.map((choice, i) => 
+          (i === currentIndex ? "→ " : "  ") + choice
+      ).join("\n");
+      
+      // Créer la nouvelle boîte
+      textBoxObj = pop(choicesText, conf);
+  }
+
+  // Actions des touches
+  registerKey('up', () => {
+      if (!active) return;
+      currentIndex = (currentIndex - 1 + choices.length) % choices.length;
+      updateDisplay();
+  });
+
+  registerKey('down', () => {
+      if (!active) return;
+      currentIndex = (currentIndex + 1) % choices.length;
+      updateDisplay();
+  });
+
+  registerKey('space', () => {
+      if (!active) return;
+      conf.onSelect(choices[currentIndex], currentIndex);
+      cleanUp();
+  });
+
+  registerKey('enter', () => {
+      if (!active) return;
+      //play("bubblepop")
+      conf.onSelect(choices[currentIndex], currentIndex);
+      cleanUp();
+  });
+
+  // Affichage initial
+  updateDisplay();
+
+  // Retourne la fonction de nettoyage
+  return cleanUp;
+}
 
 // From https://gomakethings.com/how-to-deep-merge-arrays-and-objects-with-javascript/
 /*!
@@ -704,22 +832,20 @@ function vn(string, options = {}) {
  * @returns {*}          The merged arrays or objects
  */
 function deepMerge(...objs) {
-  /**
-   * Get the object type
-   * @param  {*}       obj The object
-   * @return {String}      The object type
-   */
   function getType(obj) {
     return Object.prototype.toString.call(obj).slice(8, -1).toLowerCase();
   }
 
-  /**
-   * Deep merge two objects
-   * @return {Object}
-   */
   function mergeObj(clone, obj) {
     for (let [key, value] of Object.entries(obj)) {
       let type = getType(value);
+      
+      // Ne pas cloner les fonctions
+      if (type === 'function') {
+        clone[key] = value;
+        continue;
+      }
+
       if (
         clone[key] !== undefined &&
         getType(clone[key]) === type &&
@@ -727,28 +853,32 @@ function deepMerge(...objs) {
       ) {
         clone[key] = deepMerge(clone[key], value);
       } else {
-        clone[key] = structuredClone(value);
+        // Utiliser une copie simple pour les fonctions
+        clone[key] = type === 'function' ? value : structuredClone(value);
       }
     }
   }
 
-  // Create a clone of the first item in the objs array
-  let clone = structuredClone(objs.shift());
+  let clone = objs.shift();
+  
+  // Vérifier si c'est un objet/array avant de cloner
+  const firstType = getType(clone);
+  if (["array", "object"].includes(firstType)) {
+    clone = structuredClone(clone);
+  }
 
-  // Loop through each item
   for (let obj of objs) {
-    // Get the object type
     let type = getType(obj);
 
-    // If the current item isn't the same type as the clone, replace it
     if (getType(clone) !== type) {
-      clone = structuredClone(obj);
+      clone = type === 'function' ? obj : structuredClone(obj);
       continue;
     }
 
-    // Otherwise, merge
     if (type === "array") {
-      clone = [...clone, ...structuredClone(obj)];
+      clone = [...clone, ...obj.map(item => 
+        getType(item) === 'function' ? item : structuredClone(item)
+      )];
     } else if (type === "object") {
       mergeObj(clone, obj);
     } else {

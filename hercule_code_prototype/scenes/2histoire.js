@@ -33,21 +33,21 @@ const ligne = add([
     
         
     // faire parler Hercule
-    let taper_espace = 0; // compteur pour les répliques d'Hercule
+    //let taper_espace = 0; // compteur pour les répliques d'Hercule
 
     onKeyPress('space', () => { // animation du visage quand il parle
         hercule.play("talk");
-        taper_espace += 1;
-        if(taper_espace == 25){ // quand les x répliques sont passées, on commence le jeu
-            go('jardin');
+        //taper_espace += 1;
+        //if(taper_espace == 25){ // quand les x répliques sont passées, on commence le jeu
+            //go('jardin');
             musique();
-        };
+        //};
     });
     onKeyRelease('space', () => {
         hercule.play("face");
     });
 
-    onButtonPress('space', loquace.next); // histoire racontée
+    onButtonPress('space', ( ) => {loquace.next({x:500, y:330})}); // histoire racontée
     loquace.script([
         "Bonjour, je suis Hercule. Appuie sur la barre d'espace pour écouter mon histoire.",
         "Tu tombes bien! J’ai justement besoin de ton aide pour m’aider à terminer mes Douze Travaux.",
@@ -56,7 +56,8 @@ const ligne = add([
         "En fait, c'est la Pythie qui m'a envoyé vers lui. C'est une dame qui sait lire l'avenir.",
         "Pourquoi je suis allé la voir, me demanderas-tu?",
         "Comment te dire...",
-        "J'ai commis une énorme bêtise. Un crime impardonnable. Et c'est pour purger ma peine que je dois effectuer les Douze Travaux.",
+        "J'ai commis une énorme bêtise. Un crime impardonnable.",
+        "Et c'est pour purger ma peine que je dois effectuer les Douze Travaux.",
         "Là, je suis au Jardin des Hespérides. C'est un de mes derniers travaux.",
         "Mon but est simple: cueillir au moins trois pommes d'or et les apporter à Eurysthée.",
         "Ça a l'air simple, dit comme ça.",
@@ -74,6 +75,8 @@ const ligne = add([
         "Tape la barre espace pour sauter.",
         "Appuie sur la flèche du bas pour m'aider à me baisser.",
         "Et enfin, n'oublie pas d'appuyer sur la touche M pour appeler Minerve!",
-    ]); 
+        "scene_jardin"
+    ], true, {x:500, y:330}); 
+    
 });
 };

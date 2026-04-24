@@ -22,6 +22,9 @@ kaplay({
 });
 loquace.init();
 
+loquace.registerCommand('scene_jardin', () => {
+        go('jardin')
+    });
 
     // Initialiser les scènes
 menu.init();
