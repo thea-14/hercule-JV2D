@@ -1,6 +1,8 @@
 // SCÈNE JARDIN (JEU) NIVEAU 1
 
 let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
+//let PLAY_GAME = true;
+//let taper_espace = 0;
 
 // créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
 export function jardin(){
@@ -211,7 +213,7 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
             volume: 0.7
         }); 
     };
-    if(DIALOGUE) return; // lors de la pause narrative, Hercule nepeut plus sauter
+    if(DIALOGUE) return; // lors de la pause narrative, Hercule ne peut plus sauter
     if(hercule.perdUneVie) return;
     if(hercule.curAnim != "jump"){
         hercule.play("jump");
@@ -235,8 +237,8 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
     });
 
     // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
-    hercule.onUpdate(() => {
-        if(!DIALOGUE){
+hercule.onUpdate(() => {
+    if(!DIALOGUE){
         if(hercule.isGrounded()){
             setCamPos(hercule.pos.x, hercule.pos.y - 170);
         } else {
@@ -245,9 +247,26 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
         if(!hercule.curAnim()){
             hercule.play("stand")
         };
+        
+        };
         // si Hercule est sorti de la zone de feu, alors pause narrative
-        if (hercule.pos.x > 8300 && !DIALOGUE){
+        if (hercule.pos.x > 1300 && !DIALOGUE){
             DIALOGUE = true;
+
+            hercule.onUpdate(() => {
+                if(hercule.curAnim != "face"){
+                    hercule.play("face");
+                };
+            });
+                onKeyPress('space', () => {
+                    hercule.play("talk");
+                });
+                onKeyRelease('space', () => {
+                    hercule.play("face");
+                });
+            
+            
+            //PLAY_GAME = false;
             musique_jardin.stop();
             //son_jump.stop();
             onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
@@ -261,10 +280,9 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
                 "Heureusement qu'il y a Minerve! Une chouette peut voler très vite et voir très loin. C'est une chasseuse redoutable!",
                 "Une fois que Nérée sera redevenu humain, je pourrai l'attraper.",
                 "Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
-             ], true, {x:camPos().x, y:camPos().y + 30});  
-    
-        };
-    };
+             ], true, {x:camPos().x, y:camPos().y + 30});
+            };
+        
     });
     
 
