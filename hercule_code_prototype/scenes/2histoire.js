@@ -1,15 +1,14 @@
 // SCÈNE HISTOIRE
 import {jardin} from "./3jeu_niv1.js";
 
-export function musique(){
-    const musique = play('musique de fond', {
-        volume: 0.6,
-    });
-};
-
 export function init(){
     scene('histoire', () => {
     setBackground(BLACK);
+    
+const musique_histoire = play("musique histoire", {
+        volume: 0.4,
+        loop: true,
+    });
 
     // ajouter le décor
 jardin();
@@ -31,21 +30,23 @@ const ligne = add([
         area(),
     ]);
     
-        
-    // faire parler Hercule
-    //let taper_espace = 0; // compteur pour les répliques d'Hercule
+    // compteur d'espaces (pour les répliques)
+    let taper_espace = 0;
 
+    // faire parler Hercule
     onKeyPress('space', () => { // animation du visage quand il parle
         hercule.play("talk");
-        //taper_espace += 1;
-        //if(taper_espace == 25){ // quand les x répliques sont passées, on commence le jeu
-            //go('jardin');
-            musique();
-        //};
+        taper_espace += 1;
     });
     onKeyRelease('space', () => {
         hercule.play("face");
     });
+
+    if(taper_espace == 26){
+            musique_histoire.stop();
+    };
+
+    
 
     onButtonPress('space', ( ) => {loquace.next({x:500, y:330})}); // histoire racontée
     loquace.script([
@@ -75,8 +76,7 @@ const ligne = add([
         "Tape la barre espace pour sauter.",
         "Appuie sur la flèche du bas pour m'aider à me baisser.",
         "Et enfin, n'oublie pas d'appuyer sur la touche M pour appeler Minerve!",
-        "scene_jardin"
+        "scene_jardin",
     ], true, {x:500, y:330}); 
-    
-});
-};
+}); // fin de la scène
+}; // fin de la fonction

@@ -1,6 +1,4 @@
 // SCÈNE JARDIN (JEU) NIVEAU 1
-import { musique } from "./2histoire.js";
-
 
 let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
 
@@ -43,6 +41,11 @@ export function init(){
     setBackground(0,0,0); // fond noir
     onKeyPress("f", (c) => { // mode plein écran
     setFullscreen(!isFullscreen());
+});
+
+const musique_jardin = play("musique jardin", {
+    volume: 0.6,
+    loop: true,
 });
 
 
@@ -141,6 +144,13 @@ function appelerChouette(){
 ]);
     if(chouette.curAnim() != "fly"){
         chouette.play("fly");
+        const son_chouette = play("fly", {
+            volume: 6,
+            loop: true,
+        });
+        wait(3, () => {
+            son_chouette.stop();
+        });
     };
     chouette.onUpdate(() => { // la chouette se déplace en continu
         chouette.move(400, 70); // la chouette se déplace en diagonale vers le bas
@@ -176,41 +186,7 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
     
     hercule.perdUneVie = false; // voir collision boule de feu
 
-
-    // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
-    hercule.onUpdate(() => {
-        if(!DIALOGUE){
-        if(hercule.isGrounded()){
-            setCamPos(hercule.pos.x, hercule.pos.y - 170);
-        } else {
-            camPos(hercule.pos.x, camPos().y);
-        };
-        if(!hercule.curAnim()){
-            hercule.play("stand")
-        };
-        // si Hercule est sorti de la zone de feu, alors on passe au niveau suivant
-        if (hercule.pos.x > 8300 && !DIALOGUE){
-            DIALOGUE = true;
-            onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
-            loquace.script([
-                "Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
-                "J'ai récolté assez de pommes pour en ramener trois à Eurysthée.",
-                "Il ne me reste plus qu'à attraper Nérée pour sortir du jardin.",
-                "Tu le reconnaîtras facilement: dès qu'il me verra, il se transformera en serpent.",
-                "Au premier abord, on dirait un vieux monsieur... mais c'est un dieu très malin!",
-                "Lorsqu'il se transformera en serpent, il sera trop rapide pour que je puisse l'attraper.",
-                "Heureusement qu'il y a Minerve! Une chouette peut voler très vite et voir très loin. C'est une chasseuse redoutable!",
-                "Une fois que Nérée sera redevenu humain, je pourrai l'attraper.",
-                "Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
-             ], true, {x:camPos().x, y:camPos().y + 30});  
-    
-        };
-    };
-    });
-    
-    
-
-// Tourner à droite et à gauche: pas obligatoire si Hercule se déplace en continu
+// Déplacements d'Hercule
     // Hercule tourne à droite
     onKeyDown("right", () => {
         if(DIALOGUE) return; // lors de la pause narrative, Hercule ne peut plus avancer
@@ -230,9 +206,11 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 
     // Hercule saute
   onKeyPress("space", () => {
-    const son = play('saut', {
-        volume: 0.7
-    }); 
+    if(!DIALOGUE){ // lors de la pause narrative, on enlève le son du saut (pour la touche espace)
+        const son_jump = play('saut', {
+            volume: 0.7
+        }); 
+    };
     if(DIALOGUE) return; // lors de la pause narrative, Hercule nepeut plus sauter
     if(hercule.perdUneVie) return;
     if(hercule.curAnim != "jump"){
@@ -256,15 +234,49 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
         hercule.play("stand")
     });
 
+    // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
+    hercule.onUpdate(() => {
+        if(!DIALOGUE){
+        if(hercule.isGrounded()){
+            setCamPos(hercule.pos.x, hercule.pos.y - 170);
+        } else {
+            camPos(hercule.pos.x, camPos().y);
+        };
+        if(!hercule.curAnim()){
+            hercule.play("stand")
+        };
+        // si Hercule est sorti de la zone de feu, alors pause narrative
+        if (hercule.pos.x > 8300 && !DIALOGUE){
+            DIALOGUE = true;
+            musique_jardin.stop();
+            //son_jump.stop();
+            onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
+            loquace.script([
+                "Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
+                "J'ai récolté assez de pommes pour en ramener trois à Eurysthée.",
+                "Il ne me reste plus qu'à attraper Nérée pour sortir du jardin.",
+                "Tu le reconnaîtras facilement: dès qu'il me verra, il se transformera en serpent.",
+                "Au premier abord, on dirait un vieux monsieur... mais c'est un dieu très malin!",
+                "Lorsqu'il se transformera en serpent, il sera trop rapide pour que je puisse l'attraper.",
+                "Heureusement qu'il y a Minerve! Une chouette peut voler très vite et voir très loin. C'est une chasseuse redoutable!",
+                "Une fois que Nérée sera redevenu humain, je pourrai l'attraper.",
+                "Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
+             ], true, {x:camPos().x, y:camPos().y + 30});  
+    
+        };
+    };
+    });
+    
+
 // collision Hercule - pomme
 hercule.onCollide('pomme', (pomme) => {
-    const son = play('plus un',{
+    const son_plus_un = play('plus un',{
         volume: 0.5,
     });
     score_pommes += 1; // on met à jour le nombre de pommes récoltées
     compteur_pommes.text = score_pommes; // le compteur affiche le nombre de pommes récoltées
 
-    if(score_pommes % 30 == 0){ // chaque fois qu'Hercule récolte 30 pommes, une chouette est ajoutée au stock
+    if(score_pommes % 10 == 0){ // chaque fois qu'Hercule récolte 30 pommes, une chouette est ajoutée au stock
         stock_chouettes += 1;
         compteur_chouettes.text = stock_chouettes;
     };
@@ -306,6 +318,7 @@ hercule.onCollide('feu', (feu) => {
         const son = play('game over', {
             volume: 0.6,
         });
+        musique_jardin.stop();
         go('game over');
     };
 
