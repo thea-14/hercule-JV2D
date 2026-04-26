@@ -96,3 +96,4 @@ loadSound('game over', '/sounds/round_end.wav');
 loadSound('musique jardin', '/sounds/sunnyday.wav');
 loadSound('musique histoire', '/sounds/relaxing_music.mp3');
 loadSound('fly', '/sounds/bird_flapping.wav');
+loadSound('victoire', '/sounds/Victory.wav');

@@ -2,6 +2,8 @@
 ## Description
 Ce jeu permet d'incarner Hercule au Jardin des Hespérides, qui doit sauter pour cueillir des pommes et éviter des boules de feu.
 
+![alt-text Hercule est dans le jardin, face à une boule de feu.](Screenshot_game.png)
+
 ## Comment jouer?
 Téléchargez l'archive `nom`, décompressez-là et ouvrez le dossier dans VSCode. Ouvrez le fichier `index.html`avec _Live Server_.
 ## Attributions
@@ -11,6 +13,7 @@ Tous les dessins ont été réalisés par moi-même sur [Piskel](https://www.pis
 * Musique de fond (histoire): par TAD de OpenGameArt, [écouter ici](https://opengameart.org/content/8-bit-lofi-ice-cave)
 * Musique de fond (jeu): par Zane Little Music de OpenGameArt, [écouter ici](https://opengameart.org/content/sunny-day-day-6)
 * Musique de game over: par sauer2 de OpenGameArt, [écouter ici](https://opengameart.org/content/oldschool-win-and-die-jump-and-run-sounds)
+* Musique de victoire: par jkfite01 de OpenGameArt, [écouter ici](https://opengameart.org/content/victory-2)
 * Son de saut: par dklon de OpenGameArt, [écouter ici](https://opengameart.org/content/platformer-jumping-sounds)
 * Son de pomme récoltée: par Luke.RUSTLTD de OpenGameArt, [écouter ici](https://opengameart.org/content/10-8bit-coin-sounds)
 * Son de personnage touché: par sauer2 de OpenGameArt, [écouter ici](https://opengameart.org/content/oldschool-win-and-die-jump-and-run-sounds)

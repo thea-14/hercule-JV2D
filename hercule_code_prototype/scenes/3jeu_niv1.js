@@ -1,8 +1,8 @@
 // SCÈNE JARDIN (JEU) NIVEAU 1
 
 let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
-//let PLAY_GAME = true;
-//let taper_espace = 0;
+let taper_espace = 0;
+let begin_dialogue = false;
 
 // créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
 export function jardin(){
@@ -191,41 +191,26 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 // Déplacements d'Hercule
     // Hercule tourne à droite
     onKeyDown("right", () => {
-        if(DIALOGUE) return; // lors de la pause narrative, Hercule ne peut plus avancer
+        if(DIALOGUE){ // lors de la pause narrative, Hercule ne peut plus avancer
+            hercule.play("stand");
+            return;
+        }; 
         if(hercule.perdUneVie) return; // si Hercule est touché par une boule de feu, alors il ne peut plus avancer pendant 0.25 sec
         hercule.pos.x += 5;
         hercule.flipX = false;
+
         if(hercule.curAnim() != "walk"){
             hercule.play("walk");
-        }; 
+            
+        };
+    
         if(!hercule.isGrounded()){
             hercule.play("jump");
         };
     });
     onKeyRelease("right", () => {
-        hercule.play("stand")
+        hercule.play("stand");
     });
-
-    // Hercule saute
-  onKeyPress("space", () => {
-    if(!DIALOGUE){ // lors de la pause narrative, on enlève le son du saut (pour la touche espace)
-        const son_jump = play('saut', {
-            volume: 0.7
-        }); 
-    };
-    if(DIALOGUE) return; // lors de la pause narrative, Hercule ne peut plus sauter
-    if(hercule.perdUneVie) return;
-    if(hercule.curAnim != "jump"){
-        hercule.play("jump");
-    };
-    if(hercule.isGrounded()){
-        hercule.jump(1000);
-    };
-    hercule.play("jump");
-  });
-  onKeyRelease("space", () => {
-    hercule.play("stand");
-  });
 
     // Hercule se baisse
     onKeyDown("down", () => {
@@ -236,6 +221,39 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
         hercule.play("stand")
     });
 
+
+    // Hercule saute
+        // mode dialogue
+onKeyPress("space", () => {
+    if(DIALOGUE){
+        musique_jardin.paused = true;
+        hercule.play("talk");
+        taper_espace++;
+        if(taper_espace == 9){
+            DIALOGUE = false;
+            hercule.play("stand");
+            musique_jardin.paused = false;
+        };
+        return;
+    };
+        // mode jeu
+    if(hercule.perdUneVie) return;
+    if(hercule.curAnim != "jump"){
+        hercule.play("jump");
+    };
+    if(hercule.isGrounded()){
+        hercule.jump(1000);
+    };
+    const son_jump = play('saut', {
+        volume: 0.7
+    });
+  });
+  onKeyRelease("space", () => {
+    hercule.play("stand");
+  });
+  
+
+    
     // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
 hercule.onUpdate(() => {
     if(!DIALOGUE){
@@ -247,28 +265,12 @@ hercule.onUpdate(() => {
         if(!hercule.curAnim()){
             hercule.play("stand")
         };
-        
-        };
+    };
         // si Hercule est sorti de la zone de feu, alors pause narrative
-        if (hercule.pos.x > 1300 && !DIALOGUE){
+        if (hercule.pos.x > 8300 && !begin_dialogue){
             DIALOGUE = true;
+            begin_dialogue = true;
 
-            hercule.onUpdate(() => {
-                if(hercule.curAnim != "face"){
-                    hercule.play("face");
-                };
-            });
-                onKeyPress('space', () => {
-                    hercule.play("talk");
-                });
-                onKeyRelease('space', () => {
-                    hercule.play("face");
-                });
-            
-            
-            //PLAY_GAME = false;
-            musique_jardin.stop();
-            //son_jump.stop();
             onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
             loquace.script([
                 "Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
@@ -394,6 +396,8 @@ const neree = add([
     // collision Nérée - Hercule (quand Hercule attrape Nérée, le partie est gagnée)
     neree.onCollide('hercule', () => {
         go('win');
+        musique_jardin.stop();
+        play('victoire');
     });
 
  
