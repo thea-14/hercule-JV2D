@@ -10,9 +10,12 @@ const musique_histoire = play("musique histoire", {
         loop: true,
     });
 
+onSceneLeave(() => { // la musique s'arrête quand on change de scène
+    musique_histoire.stop();
+});
+
     // ajouter le décor
 jardin();
-
     // ligne pour la gravité
 const ligne = add([
     rect(100000, 2),
@@ -30,23 +33,16 @@ const ligne = add([
         area(),
     ]);
     
-    // compteur d'espaces (pour les répliques)
-    let taper_espace = 0;
-
+    
     // faire parler Hercule
     onKeyPress('space', () => { // animation du visage quand il parle
         hercule.play("talk");
-        taper_espace += 1;
     });
     onKeyRelease('space', () => {
         hercule.play("face");
     });
 
-    if(taper_espace == 26){
-            musique_histoire.stop();
-    };
 
-    
 
     onButtonPress('space', ( ) => {loquace.next({x:500, y:330})}); // histoire racontée
     loquace.script([
@@ -79,7 +75,7 @@ const ligne = add([
         "Appuie sur la flèche droite pour avancer.",
         "Tape la barre espace pour sauter.",
         "Appuie sur la flèche du bas pour m'aider à me baisser.",
-        "musique_stop Allons-y!",
+        "Allons-y!",
         "scene_jardin",
     ], true, {x:500, y:330}); 
 }); // fin de la scène

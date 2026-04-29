@@ -21,13 +21,12 @@ kaplay({
 });
 loquace.init();
 
+    // commandes Loquace
 loquace.registerCommand('scene_jardin', () => {
         go('jardin');
     });
 
-loquace.registerCommand('musique_stio', () => {
-       musique.stop();
-    });
+
     // Initialiser les scènes
 menu.init();
 histoire.init();
@@ -36,7 +35,7 @@ gameover.init();
 win.init();
 
     // Aller au menu (scène 1)
-go('menu');
+go('jardin');
 
     // Ajouter de la gravité (pour les scènes suivantes)
 setGravity(2400);

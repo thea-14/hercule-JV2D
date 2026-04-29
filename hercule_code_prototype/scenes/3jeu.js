@@ -1,4 +1,4 @@
-// SCÈNE JARDIN (JEU) NIVEAU 1
+// SCÈNE JARDIN (JEU)
 
 let PAUSE = false; // voir intervention narrative après qu'Hercule ait attrapé sa première chouette
 let begin_pause = false;
@@ -6,6 +6,8 @@ let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sor
 let begin_dialogue = false;
 let taper_espace = 0;
 let taper_espace_pause = 0;
+
+let feu_end = false;
 
 // créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
 export function jardin(){
@@ -76,19 +78,23 @@ function boules_de_feu(){
         'feu',
     ]);
     feu.onUpdate(() => {
-        if(PAUSE | DIALOGUE){
+        if(PAUSE || DIALOGUE){
             feu.destroy();
             return;
         };  // lors de la pause narrative, les boules de feu s'arrêtent
         if(feu.curAnim() != "move"){
             feu.play("move");
         };
+        if(feu_end){
+            feu.destroy();
+        };
         feu.move(-300, 0);
     });
 };
 
 loop(3, () => { // boucle: toutes les 3 sec, une boule de feu est lancée
-    if(PAUSE | DIALOGUE) return; // lors de la pause narrative, les boules de feu s'arrêtent
+    if(PAUSE || DIALOGUE) return; // lors de la pause narrative, les boules de feu s'arrêtent
+    if(feu_end) return;
     boules_de_feu();
 });
 
@@ -156,6 +162,9 @@ function appelerChouette(){
         wait(2, () => {
             son_chouette.stop();
         });
+        onSceneLeave(() => {
+            son_chouette.stop()
+        });
     };
     chouette.onUpdate(() => { // la chouette se déplace en continu
         chouette.move(600, 300); // la chouette se déplace en diagonale vers le bas
@@ -166,6 +175,7 @@ function appelerChouette(){
         chouette.destroy();
     });
 };
+
 
 onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" et s'il y en a en stock
     if(stock_chouettes > 0){
@@ -194,7 +204,7 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 // Déplacements d'Hercule
     // Hercule tourne à droite
     onKeyDown("right", () => {
-        if(PAUSE | DIALOGUE){ // lors de la pause narrative, Hercule ne peut plus avancer
+        if(PAUSE || DIALOGUE){ // lors de la pause narrative, Hercule ne peut plus avancer
             hercule.play("stand");
             return;
         }; 
@@ -270,6 +280,9 @@ onKeyPress("space", () => {
     
     // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
 hercule.onUpdate(() => {
+    if(hercule.pos.x > 7900 && !feu_end){
+        feu_end = true;
+    };
     if(!DIALOGUE){
         if(hercule.isGrounded()){
             setCamPos(hercule.pos.x, hercule.pos.y - 170);
@@ -304,7 +317,7 @@ hercule.onUpdate(() => {
             DIALOGUE = true;
             begin_dialogue = true;
 
-            onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
+            //onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
             loquace.script([
                 "Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
                 "J'ai récolté assez de pommes pour en ramener trois à Eurysthée.",
