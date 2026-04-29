@@ -1,5 +1,5 @@
 // SCÈNE HISTOIRE
-import {jardin} from "./3jeu_niv1.js";
+import {jardin} from "./3jeu.js";
 
 export function init(){
     scene('histoire', () => {
@@ -65,17 +65,21 @@ const ligne = add([
         "Mais ne te fie pas aux apparences paisibles de ce jardin: il est rempli de dangers.",
         "Tout d'abord, il est gardé par un dragon. Il s'appelle Ladon et il est très féroce.",
         "Ensuite, je ne peux pas sortir du jardin seul... ",
-        "Il faut que je réussise à attraper Nérée, un dieu marin qui se métamorphose en serpent pour échapper à ses ennemis.",
+        "Il faut que je réussise à attraper Nérée.", 
+        "C'est un dieu marin qui se métamorphose en serpent pour échapper à ses ennemis.",
         "Nérée et moi, on ne s'aime pas trop.",
-        "C'est lui qui m'a indiqué le chemin pour le Jardin des Hespérides. Le problème, c'est que lui seul peut m'aider à en sortir.",
-        "Pour attraper Nérée, seule Minerve peut m'aider. C'est la déesse de la sagesse, de l'intelligence et de la stratégie. Elle me protège depuis le début des Travaux.",
-        "Pour que Minerve puisse m'aider, il faut que je récolte au moins 30 pommes. Elle apparaît sous la forme d'une chouette: c'est son animal symbolique.",
+        "C'est lui qui m'a indiqué le chemin pour le Jardin des Hespérides.",
+        "Le problème, c'est que lui seul peut m'aider à en sortir.",
+        "Pour attraper Nérée, seule Minerve peut m'aider.",
+        "C'est la déesse de la sagesse, de l'intelligence et de la stratégie. Elle me protège depuis le début des Travaux.",
+        "Pour que Minerve puisse m'aider, il faut que je récolte au moins 30 pommes.",
+        "Elle apparaît sous la forme d'une chouette: c'est son animal symbolique.",
         "Aide-moi à cueillir les pommes et à attraper Nérée pour sortir du jardin!",
         "Les commandes de jeu sont très simples.", // instructions pour les commandes
         "Appuie sur la flèche droite pour avancer.",
         "Tape la barre espace pour sauter.",
         "Appuie sur la flèche du bas pour m'aider à me baisser.",
-        "Et enfin, n'oublie pas d'appuyer sur la touche M pour appeler Minerve!",
+        "musique_stop Allons-y!",
         "scene_jardin",
     ], true, {x:500, y:330}); 
 }); // fin de la scène

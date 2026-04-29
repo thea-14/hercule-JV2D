@@ -1,8 +1,11 @@
 // SCÈNE JARDIN (JEU) NIVEAU 1
 
+let PAUSE = false; // voir intervention narrative après qu'Hercule ait attrapé sa première chouette
+let begin_pause = false;
 let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
-let taper_espace = 0;
 let begin_dialogue = false;
+let taper_espace = 0;
+let taper_espace_pause = 0;
 
 // créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
 export function jardin(){
@@ -73,7 +76,7 @@ function boules_de_feu(){
         'feu',
     ]);
     feu.onUpdate(() => {
-        if(DIALOGUE){
+        if(PAUSE | DIALOGUE){
             feu.destroy();
             return;
         };  // lors de la pause narrative, les boules de feu s'arrêtent
@@ -85,7 +88,7 @@ function boules_de_feu(){
 };
 
 loop(3, () => { // boucle: toutes les 3 sec, une boule de feu est lancée
-    if(DIALOGUE) return; // lors de la pause narrative, les boules de feu s'arrêtent
+    if(PAUSE | DIALOGUE) return; // lors de la pause narrative, les boules de feu s'arrêtent
     boules_de_feu();
 });
 
@@ -150,12 +153,12 @@ function appelerChouette(){
             volume: 6,
             loop: true,
         });
-        wait(3, () => {
+        wait(2, () => {
             son_chouette.stop();
         });
     };
     chouette.onUpdate(() => { // la chouette se déplace en continu
-        chouette.move(400, 70); // la chouette se déplace en diagonale vers le bas
+        chouette.move(600, 300); // la chouette se déplace en diagonale vers le bas
     });
     // collision chouette - boule de feu
     chouette.onCollide('feu', (feu) => {
@@ -191,7 +194,7 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 // Déplacements d'Hercule
     // Hercule tourne à droite
     onKeyDown("right", () => {
-        if(DIALOGUE){ // lors de la pause narrative, Hercule ne peut plus avancer
+        if(PAUSE | DIALOGUE){ // lors de la pause narrative, Hercule ne peut plus avancer
             hercule.play("stand");
             return;
         }; 
@@ -236,6 +239,17 @@ onKeyPress("space", () => {
         };
         return;
     };
+    if(PAUSE){
+        musique_jardin.paused = true;
+        hercule.play("talk");
+        taper_espace_pause++;
+        if(taper_espace_pause == 9){
+            PAUSE = false;
+            hercule.play("stand");
+            musique_jardin.paused = false;
+        };
+        return;
+    };
         // mode jeu
     if(hercule.perdUneVie) return;
     if(hercule.curAnim != "jump"){
@@ -266,7 +280,26 @@ hercule.onUpdate(() => {
             hercule.play("stand")
         };
     };
-        // si Hercule est sorti de la zone de feu, alors pause narrative
+        // lorsqu'il y a la première chouette en stock, pause narrative/explicative
+        if(stock_chouettes == 1 && !begin_pause){
+            PAUSE = true;
+            begin_pause = true;
+
+            onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
+            loquace.script([
+                "J'ai ma première chouette!",
+                "Elle va ma protéger contre les boules de feu.",
+                "Pour m'aider, c'est très simple.",
+                "Dès que tu vois une boule de feu, appuie sur M pour appeler Minerve.",
+                "Mais attention...",
+                "J'aurai besoin de Minerve encore plus tard.",
+                "Donc n'utilise pas toutes les chouettes que tu as en stock!",
+                "Sinon, je ne pourrai jamais sortir de ce jardin...",
+                "Ne perdons pas de temps!",
+            ], true, {x:camPos().x, y:camPos().y + 30});
+        };
+
+    // si Hercule est sorti de la zone de feu, alors pause narrative
         if (hercule.pos.x > 8300 && !begin_dialogue){
             DIALOGUE = true;
             begin_dialogue = true;

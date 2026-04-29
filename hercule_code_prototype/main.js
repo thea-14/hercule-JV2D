@@ -2,8 +2,7 @@
     // Importer les scènes
 import * as menu from "./scenes/1menu.js";
 import * as histoire from "./scenes/2histoire.js";
-import * as jeu1 from "./scenes/3jeu_niv1.js";
-import * as jeu2 from "./scenes/3jeu_niv2.js";
+import * as jeu from "./scenes/3jeu.js";
 import * as gameover from "./scenes/4gameover.js";
 import * as win from "./scenes/5win.js";
 
@@ -26,16 +25,18 @@ loquace.registerCommand('scene_jardin', () => {
         go('jardin');
     });
 
+loquace.registerCommand('musique_stio', () => {
+       musique.stop();
+    });
     // Initialiser les scènes
 menu.init();
 histoire.init();
-jeu1.init();
-jeu2.init();
+jeu.init();
 gameover.init();
 win.init();
 
     // Aller au menu (scène 1)
-go('jardin');
+go('menu');
 
     // Ajouter de la gravité (pour les scènes suivantes)
 setGravity(2400);
