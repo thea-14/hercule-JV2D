@@ -35,7 +35,7 @@ gameover.init();
 win.init();
 
     // Aller au menu (scène 1)
-go('jardin');
+go('histoire');
 
     // Ajouter de la gravité (pour les scènes suivantes)
 setGravity(2400);
@@ -97,3 +97,5 @@ loadSound('musique jardin', '/sounds/sunnyday.wav');
 loadSound('musique histoire', '/sounds/relaxing_music.mp3');
 loadSound('fly', '/sounds/bird_flapping.wav');
 loadSound('victoire', '/sounds/Victory.wav');
+loadSound('chouette contre feu', '/sounds/SoundEnemyDeath.wav');
+loadSound('click', '/sounds/click_sound_5.mp3');

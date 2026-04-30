@@ -14,9 +14,11 @@ Tous les dessins ont été réalisés par moi-même sur [Piskel](https://www.pis
 * __Musique de fond (jeu)__: par Zane Little Music de OpenGameArt, [écouter ici](https://opengameart.org/content/sunny-day-day-6)
 * __Musique de game over__: par sauer2 de OpenGameArt, [écouter ici](https://opengameart.org/content/oldschool-win-and-die-jump-and-run-sounds)
 * __Musique de victoire__: par jkfite01 de OpenGameArt, [écouter ici](https://opengameart.org/content/victory-2)
+* __Son de clic__: par pauliuw de OpenGameArt, [écouter ici](https://opengameart.org/content/click-sounds6)
 * __Son de saut__: par dklon de OpenGameArt, [écouter ici](https://opengameart.org/content/platformer-jumping-sounds)
 * __Son de pomme récoltée__: par Luke.RUSTLTD de OpenGameArt, [écouter ici](https://opengameart.org/content/10-8bit-coin-sounds)
 * __Son de personnage touché__: par sauer2 de OpenGameArt, [écouter ici](https://opengameart.org/content/oldschool-win-and-die-jump-and-run-sounds)
+* __Son de la collision entre chouette et boule de feu__: par Vircon32 de OpenGameArt, [écouter ici](https://opengameart.org/content/retro-game-sound-effects)
 * __Son du vol de chouette__: par Clusman de Freesound, [écouter ici](https://freesound.org/people/Clusman/sounds/543118/)
 ### Fichier `loquace.js`
 Les modifications apportées au fichier `loquace.js` sont de ColinLug.

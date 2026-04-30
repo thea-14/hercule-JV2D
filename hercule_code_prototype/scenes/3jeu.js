@@ -171,6 +171,9 @@ function appelerChouette(){
     });
     // collision chouette - boule de feu
     chouette.onCollide('feu', (feu) => {
+        const son_collision = play('chouette contre feu', {
+            volume: 0.4,
+        });
         feu.destroy();
         chouette.destroy();
     });

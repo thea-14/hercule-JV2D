@@ -217,13 +217,13 @@ function next(camPos={x:0,y:0}) {
 
   // Clear and return if no more statements
   if (statementCounter > statements.length - 1) {
-    //play("bubblepop", {volume:0.3})
+    //play("click");
     clear();
     return false;
   }
 
   // First remove any existing dialog
-  //play("bubblepop")
+  play("click", {volume: 0.6 });
   clear();
 
   // Parse statement
@@ -806,6 +806,7 @@ function popChoice(choices, options = {}) {
 
   registerKey('space', () => {
       if (!active) return;
+      play("click", {volume: 0.6});
       conf.onSelect(choices[currentIndex], currentIndex);
       cleanUp();
   });
