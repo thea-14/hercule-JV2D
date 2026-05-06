@@ -106,3 +106,5 @@ loadSound('fly', '/sounds/bird_flapping.wav');
 loadSound('victoire', '/sounds/Victory.wav');
 loadSound('chouette contre feu', '/sounds/SoundEnemyDeath.wav');
 loadSound('click', '/sounds/click_sound_5.mp3');
+loadSound('rire', '/sounds/evil_laugh.mp3');
+loadSound('grognement', '/sounds/monster-5.wav');

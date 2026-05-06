@@ -423,6 +423,10 @@ const neree = add([
                 neree.flipX = false;
                 neree_avance = true;
                 neree.play("walk");
+                play("rire", {
+                    volume: 0.4,
+                    loop: false,
+                });
                 wait(2, () => { // Nérée se métamorphose après 2 secondes de marche
                     neree_avance = true;
                     neree.play("metamorphose");
@@ -442,6 +446,10 @@ const neree = add([
     neree.onCollide('chouette', (chouette) => {
         neree_avance = false; // Nérée s'arrête
         neree.play("stand");
+        play("grognement",{
+            volume: 2,
+            loop: false,
+        });
         chouette.destroy();
     });
 
