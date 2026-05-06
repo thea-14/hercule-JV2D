@@ -1,14 +1,5 @@
 // SCÈNE JARDIN (JEU)
 
-let PAUSE = false; // voir intervention narrative après qu'Hercule ait attrapé sa première chouette
-let begin_pause = false;
-let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
-let begin_dialogue = false;
-let taper_espace = 0;
-let taper_espace_pause = 0;
-
-let feu_end = false;
-
 // créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
 export function jardin(){
     // créer une fonction pomme
@@ -45,16 +36,24 @@ export function jardin(){
 // exporter la scène "jardin"
 export function init(){
     scene('jardin', () => {
-    setBackground(0,0,0); // fond noir
+    setBackground(BLACK);
     onKeyPress("f", (c) => { // mode plein écran
     setFullscreen(!isFullscreen());
 });
+
+let PAUSE = false; // voir intervention narrative après qu'Hercule ait attrapé sa première chouette
+let begin_pause = false;
+let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
+let begin_dialogue = false;
+let taper_espace = 0; // compteur d'espaces pour les répliques de DIALOGUE
+let taper_espace_pause = 0; // compteur d'espaces pour les répliques de PAUSE
+
+let feu_end = false; // voir interventions narratives (le feu s'arrête)
 
 const musique_jardin = play("musique jardin", {
     volume: 0.6,
     loop: true,
 });
-
 
 // ligne pour la gravité
 const ligne = add([
@@ -135,6 +134,8 @@ const tete_chouette = add([
     scale(1.75),
     fixed(),
 ]);
+tete_chouette.play("normal");
+
 const compteur_chouettes = add([
     text("", {size:48}),
     pos(width() - 150, 155),
@@ -279,7 +280,6 @@ onKeyPress("space", () => {
     hercule.play("stand");
   });
   
-
     
     // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
 hercule.onUpdate(() => {
@@ -323,7 +323,7 @@ hercule.onUpdate(() => {
             //onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
             loquace.script([
                 "Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
-                "J'ai récolté assez de pommes pour en ramener trois à Eurysthée.",
+                "J'ai récolté assez de pommes d'or pour Eurysthée.",
                 "Il ne me reste plus qu'à attraper Nérée pour sortir du jardin.",
                 "Tu le reconnaîtras facilement: dès qu'il me verra, il se transformera en serpent.",
                 "Au premier abord, on dirait un vieux monsieur... mais c'est un dieu très malin!",
@@ -333,7 +333,10 @@ hercule.onUpdate(() => {
                 "Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
              ], true, {x:camPos().x, y:camPos().y + 30});
             };
-        
+        // lorsque Nérée est dans le champ de vision d'Hercule, le logo de la chouette s'anime pour nous inciter à utiliser la chouette
+        if(hercule.pos.x > 8500 && tete_chouette.curAnim() != "bounce"){
+            tete_chouette.play("bounce");
+        };
     });
     
 

@@ -1,6 +1,9 @@
 // SCÈNE MENU
 export function init(){
     scene('menu', () => {
+        onKeyPress("f", (c) => {
+            setFullscreen(!isFullscreen());
+        });
         setBackground(BLACK);
         add([
             sprite('titre'),

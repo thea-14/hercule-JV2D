@@ -9,14 +9,14 @@ export function init(){
 
         const bravo = add([
             text('Bravo!\nGrâce à toi, Hercule a réussi\nà sortir du Jardin des Hespérides!', 
-                {size:30, align:"center", lineSpacing:20}),
+                {size:28, align:"center", lineSpacing:20}),
             pos(width()/2, height()/2 - 50),
             anchor("center"),
         ]);
         wait(3, () => {
             bravo.destroy();
             const rejouer = add([
-                text('Pour rejouer, appuie sur la barre espace.', {size:30}),
+                text('Pour recommencer le jeu, appuie sur la barre espace.', {size:28}),
                 pos(width()/2, height()/2 - 50),
                 anchor("center"),
             ]);

@@ -35,7 +35,7 @@ gameover.init();
 win.init();
 
     // Aller au menu (scène 1)
-go('histoire');
+go('jardin');
 
     // Ajouter de la gravité (pour les scènes suivantes)
 setGravity(2400);
@@ -48,7 +48,14 @@ loadSprite('sortie jardin', '/assets/Jardin_Sortie.png');
 loadSprite('pomme', '/assets/pomme_feuilles.png');
 loadSprite('pomme entière', '/assets/Pomme.png');
 loadSprite('coeur', '/assets/Coeur.png');
-loadSprite('tête chouette', '/assets/chouette_tete.png');
+loadSprite('tête chouette', '/assets/chouette_tete.png', {
+    sliceX: 4,
+    sliceY: 1,
+    anims:{
+        "normal":{from:0, to:0},
+        "bounce":{from:0, to:3, loop:true},
+    },
+});
 loadSprite('chouette', '/assets/Chouette.png', {
     sliceX: 4,
     sliceY: 1,

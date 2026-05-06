@@ -3,6 +3,9 @@ import {jardin} from "./3jeu.js";
 
 export function init(){
     scene('histoire', () => {
+        onKeyPress("f", (c) => {
+            setFullscreen(!isFullscreen());
+        });
     setBackground(BLACK);
     
 const musique_histoire = play("musique histoire", {
@@ -56,7 +59,7 @@ const ligne = add([
         "J'ai commis une énorme bêtise. Un crime impardonnable.",
         "Et c'est pour purger ma peine que je dois effectuer les Douze Travaux.",
         "Là, je suis au Jardin des Hespérides. C'est un de mes derniers travaux.",
-        "Mon but est simple: cueillir au moins trois pommes d'or et les apporter à Eurysthée.",
+        "Mon but est simple: cueillir des pommes d'or pour les apporter à Eurysthée.",
         "Ça a l'air simple, dit comme ça.",
         "Mais ne te fie pas aux apparences paisibles de ce jardin: il est rempli de dangers.",
         "Tout d'abord, il est gardé par un dragon. Il s'appelle Ladon et il est très féroce.",
@@ -68,7 +71,7 @@ const ligne = add([
         "Le problème, c'est que lui seul peut m'aider à en sortir.",
         "Pour attraper Nérée, seule Minerve peut m'aider.",
         "C'est la déesse de la sagesse, de l'intelligence et de la stratégie. Elle me protège depuis le début des Travaux.",
-        "Pour que Minerve puisse m'aider, il faut que je récolte au moins 30 pommes.",
+        "Pour que Minerve puisse m'aider, il faut que je récolte au moins 10 pommes.",
         "Elle apparaît sous la forme d'une chouette: c'est son animal symbolique.",
         "Aide-moi à cueillir les pommes et à attraper Nérée pour sortir du jardin!",
         "Les commandes de jeu sont très simples.", // instructions pour les commandes

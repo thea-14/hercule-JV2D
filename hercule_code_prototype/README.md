@@ -1,8 +1,13 @@
 # POMDOR
 ## Description
-Ce jeu permet d'incarner Hercule au Jardin des Hespérides, qui doit sauter pour cueillir des pommes et éviter des boules de feu.
+Ce jeu permet d'incarner Hercule au Jardin des Hespérides. Il doit sauter pour cueillir des pommes et éviter des boules de feu.
 
 ![alt-text Hercule est dans le jardin, face à une boule de feu.](Screenshot_game.png)
+
+## Librairie de jeu utilisée
+Ce jeu a été développé avec [Kaplay](https://kaplayjs.com/).
+
+![alt-text Logo Kaplay](kaplay.gif)
 
 ## Comment jouer?
 Téléchargez l'archive `nom`, décompressez-là et ouvrez le dossier dans VSCode. Ouvrez le fichier `index.html`avec _Live Server_.
@@ -21,10 +26,10 @@ Tous les dessins ont été réalisés par moi-même sur [Piskel](https://www.pis
 * __Son de la collision entre chouette et boule de feu__: par Vircon32 de OpenGameArt, [écouter ici](https://opengameart.org/content/retro-game-sound-effects)
 * __Son du vol de chouette__: par Clusman de Freesound, [écouter ici](https://freesound.org/people/Clusman/sounds/543118/)
 ### Fichier `loquace.js`
-Les modifications apportées au fichier `loquace.js` sont de ColinLug.
+Les modifications apportées au fichier `loquace.js` sont de ColinLug, sauf le son "click" qui est un ajout de ma part.
 ## Recours aux LLMs
 Aucun code ni partie de code n'a été généré par un LLM. En revanche, ChatGPT a été utilisé de façon ponctuelle pour réparer des bugs et répondre à des questions de syntaxe.
 ## Contexte de développement
-Ce jeu a été développé avec Kaplay, dans le cadre du cours "Développement de jeux vidéo 2D" donné par Loïc Cattani au semestre de printemps 2026 à l'Université de Lausanne.
+Ce jeu a été développé dans le cadre du cours "Développement de jeux vidéo 2D" donné par Loïc Cattani au semestre de printemps 2026 à l'Université de Lausanne.
 
 ## Remerciements

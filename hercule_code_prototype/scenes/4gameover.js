@@ -1,7 +1,7 @@
 // SCÈNE GAME OVER
 export function init(){
     scene('game over', () => {
-    setBackground(0,0,0);
+    setBackground(BLACK);
     add([
         text('Hercule a perdu... Mais il a encore besoin de ton aide!', {
             size: 26,
