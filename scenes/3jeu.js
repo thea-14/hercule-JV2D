@@ -1,23 +1,20 @@
 // SCÈNE JARDIN (JEU)
 
-// créer une fonction "jardin" pour ajouter plusieurs fois le même décor et les pommes aux arbres
-export function jardin(){
-    // créer une fonction pomme
+
+export function jardin(){ // décor
     function pomme(x, y){
-    return add([
-        sprite('pomme'),
-        pos(x, y),
-        area({shape: new Rect(vec2(30,30),40,40)}),
-        'pomme',
-    ]);
-};
-    // répéter le même décor
+        return add([
+            sprite('pomme'),
+            pos(x, y),
+            area({shape: new Rect(vec2(30,30),40,40)}),
+            'pomme',
+        ]);
+    };
     for (let i = 0; i < 100; i++){
         add([
             sprite('jardin'),
             pos(800 * i, 0),
         ]);
-    // ajouter des pommes
         // 1er arbre
         pomme(800 * i - 760, 150);
         pomme(800 * i - 670, 260);
@@ -33,179 +30,170 @@ export function jardin(){
     };
 };
 
-// exporter la scène "jardin"
+
 export function init(){
     scene('jardin', () => {
-    setBackground(BLACK);
-    onKeyPress("f", (c) => { // mode plein écran
-    setFullscreen(!isFullscreen());
-});
-
-let PAUSE = false; // voir intervention narrative après qu'Hercule ait attrapé sa première chouette
-let begin_pause = false;
-let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
-let begin_dialogue = false;
-let taper_espace = 0; // compteur d'espaces pour les répliques de DIALOGUE
-let taper_espace_pause = 0; // compteur d'espaces pour les répliques de PAUSE
-
-let feu_end = false; // voir interventions narratives (le feu s'arrête)
-
-const musique_jardin = play("musique jardin", {
-    volume: 0.6,
-    loop: true,
-});
-
-// ligne pour la gravité
-const ligne = add([
-    rect(100000, 2),
-    area(),
-    body({isStatic: true}),
-    pos(0, 460),
-    opacity(0),
-]);
-
-// ajouter le décor
-jardin();
-
-// ajouter des boules de feu
-function boules_de_feu(){
-    const hauteur = rand(270, 400); // hauteur aléatoire des boules de feu
-    const feu = add([
-        sprite('boule de feu'),
-        pos(8000, hauteur),
-        area({shape: new Rect(vec2(15, 30),65,40)}),
-        'feu',
-    ]);
-    feu.onUpdate(() => {
-        if(PAUSE || DIALOGUE){
-            feu.destroy();
-            return;
-        };  // lors de la pause narrative, les boules de feu s'arrêtent
-        if(feu.curAnim() != "move"){
-            feu.play("move");
-        };
-        if(feu_end){
-            feu.destroy();
-        };
-        feu.move(-300, 0);
+        setBackground(BLACK);
+        onKeyPress("f", (c) => { // mode plein écran
+        setFullscreen(!isFullscreen());
     });
-};
+    
+    let PAUSE = false; // voir intervention narrative après qu'Hercule ait attrapé sa première chouette
+    let begin_pause = false;
+    let DIALOGUE = false; // voir intervention narrative une fois qu'Hercule est sorti de la zone des boules de feu
+    let begin_dialogue = false;
+    let taper_espace = 0; // compteur d'espaces pour les répliques de DIALOGUE
+    let taper_espace_pause = 0; // compteur d'espaces pour les répliques de PAUSE
 
-loop(3, () => { // boucle: toutes les 3 sec, une boule de feu est lancée
-    if(PAUSE || DIALOGUE) return; // lors de la pause narrative, les boules de feu s'arrêtent
-    if(feu_end) return;
-    boules_de_feu();
-});
+    let feu_end = false; // voir interventions narratives (le feu s'arrête)
+
+    const musique_jardin = play("musique jardin", {
+        volume: 0.6,
+        loop: true,
+    });
 
 
-// ajouter les vies (3 coeurs) en haut à droite de l'écran
-let coeurs = [];
-for (let i = 0; i < 3; i++){
-    const coeur = add([
-        sprite('coeur'),
-        pos(width() - 70 - i*60, 10),
+    const ligne = add([ // ligne de gravité
+        rect(100000, 2),
+        area(),
+        body({isStatic: true}),
+        pos(0, 460),
+        opacity(0),
+    ]);
+
+
+    jardin();
+    
+    function boules_de_feu(){
+        const hauteur = rand(260, 400); // hauteur aléatoire des boules de feu
+        const feu = add([
+            sprite('boule de feu'),
+            pos(8000, hauteur),
+            area({shape: new Rect(vec2(15, 30),65,40)}),
+            'feu',
+        ]);
+        feu.onUpdate(() => {
+            if(PAUSE || DIALOGUE){ // lors des pauses narratives, les boules de feu s'arrêtent
+                feu.destroy();
+                return;
+            };  
+            if(feu.curAnim() != "move"){
+                feu.play("move");
+            };
+            if(feu_end){
+                feu.destroy();
+            };
+            feu.move(-300, 0);
+        });
+    };
+    loop(3, () => { // une boule de feu part toutes les 3sec
+        if(PAUSE || DIALOGUE) return; // lors de la pause narrative, les boules de feu s'arrêtent
+        if(feu_end) return;
+        boules_de_feu();
+    });
+
+
+// COMPTEURS (FIXÉS EN HAUT À DROITE DE L'ÉCRAN)
+    let coeurs = [];
+    for (let i = 0; i < 3; i++){
+        const coeur = add([
+            sprite('coeur'),
+            pos(width() - 70 - i*60, 10),
+            fixed(),
+        ]);
+        coeurs.push(coeur);
+    };
+
+
+    let score_pommes = 0;
+    const pomme_entiere = add([
+        sprite('pomme entière'),
+        pos(width() - 100, 50),
+        scale(1.25),
         fixed(),
     ]);
-    coeurs.push(coeur);
-};
+    const compteur_pommes = add([
+        text("", {size:48}),
+        pos(width() - 150, 90),
+        color(YELLOW),
+        fixed(),
+    ]);
 
-// ajouter le compteur de pommes
-let score_pommes = 0;
-const pomme_entiere = add([
-    sprite('pomme entière'),
-    pos(width() - 100, 50),
-    scale(1.25),
-    fixed(),
-]);
+    let stock_chouettes = 0;
+    const tete_chouette = add([
+        sprite('tête chouette'),
+        pos(width() - 130, 100),
+        scale(1.75),
+        fixed(),
+    ]);
+    tete_chouette.play("normal"); // voir hercule.onUpdate, où la tête de chouette se mettre à bouger lorsqu'Hercule sera face à Nérée
+    const compteur_chouettes = add([
+        text("", {size:48}),
+        pos(width() - 150, 155),
+        color(102, 60, 26),
+        fixed(),
+    ]);
 
-const compteur_pommes = add([
-    text("", {size:48}),
-    pos(width() - 150, 90),
-    color(YELLOW),
-    fixed(),
-]);
-
-// ajouter le compteur de chouettes
-let stock_chouettes = 0;
-
-const tete_chouette = add([
-    sprite('tête chouette'),
-    pos(width() - 130, 100),
-    scale(1.75),
-    fixed(),
-]);
-tete_chouette.play("normal");
-
-const compteur_chouettes = add([
-    text("", {size:48}),
-    pos(width() - 150, 155),
-    color(102, 60, 26),
-    fixed(),
-]);
-
-// ajouter la chouette
-function appelerChouette(){
-    const chouette = add([
-    sprite('chouette'),
-    pos(hercule.pos.x, 200),
-    scale(1.5),
-    anchor("bot"),
-    body({gravityScale: 0}),
-    area({shape: new Rect(vec2(10,-18),70,50)}),
-    'chouette',
-]);
-    if(chouette.curAnim() != "fly"){
-        chouette.play("fly");
-        const son_chouette = play("fly", {
-            volume: 6,
-            loop: true,
+// CHOUETTE
+    function appelerChouette(){
+        const chouette = add([
+            sprite('chouette'),
+            pos(hercule.pos.x, 200),
+            scale(1.5),
+            anchor("bot"),
+            body({gravityScale: 0}),
+            area({shape: new Rect(vec2(10,-18),70,50)}),
+            'chouette',
+        ]);
+        if(chouette.curAnim() != "fly"){
+            chouette.play("fly");
+            const son_chouette = play("fly", {
+                volume: 6,
+                loop: true,
+            });
+            wait(2, () => {
+                son_chouette.stop();
+            });
+            onSceneLeave(() => {
+                son_chouette.stop()
+            });
+        };
+        chouette.onUpdate(() => {
+            chouette.move(600, 300); // la chouette se déplace en diagonale vers le bas
         });
-        wait(2, () => {
-            son_chouette.stop();
-        });
-        onSceneLeave(() => {
-            son_chouette.stop()
+        chouette.onCollide('feu', (feu) => {
+            const son_collision = play('chouette contre feu', {
+                volume: 0.4,
+            });
+            feu.destroy();
+            chouette.destroy();
         });
     };
-    chouette.onUpdate(() => { // la chouette se déplace en continu
-        chouette.move(600, 300); // la chouette se déplace en diagonale vers le bas
+
+    onKeyPress("m", () => {
+        if(stock_chouettes > 0){
+            appelerChouette();
+            stock_chouettes -= 1;
+            compteur_chouettes.text = stock_chouettes;
+        };
+        if(stock_chouettes == 0){ // affiche une chaîne vide au lieu de 0
+            compteur_chouettes.text = "";
+        }; 
     });
-    // collision chouette - boule de feu
-    chouette.onCollide('feu', (feu) => {
-        const son_collision = play('chouette contre feu', {
-            volume: 0.4,
-        });
-        feu.destroy();
-        chouette.destroy();
-    });
-};
 
-
-onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" et s'il y en a en stock
-    if(stock_chouettes > 0){
-        appelerChouette();
-        stock_chouettes -= 1;
-        compteur_chouettes.text = stock_chouettes;
-    };
-    if(stock_chouettes == 0){ // affiche une chaîne vide au lieu de 0
-        compteur_chouettes.text = "";
-    }; 
-});
-
-// ajouter Hercule
+// HERCULE
     const hercule = add([
         sprite('Hercule'),
         pos(500, 466),
         scale(2),
         anchor("bot"),
         body(),
-        area({shape: new Rect(vec2(0,-3),30,50)}),
+        area({shape: new Rect(vec2(0,-3),30,56)}),
         'hercule',
     ]);
     
     hercule.perdUneVie = false; // voir collision boule de feu
 
-// Déplacements d'Hercule
     // Hercule tourne à droite
     onKeyDown("right", () => {
         if(PAUSE || DIALOGUE){ // lors de la pause narrative, Hercule ne peut plus avancer
@@ -218,7 +206,6 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 
         if(hercule.curAnim() != "walk"){
             hercule.play("walk");
-            
         };
     
         if(!hercule.isGrounded()){
@@ -241,62 +228,62 @@ onKeyPress("m", () => { // la chouette apparaît seulement quand on presse "c" e
 
     // Hercule saute
         // mode dialogue
-onKeyPress("space", () => {
-    if(DIALOGUE){
-        musique_jardin.paused = true;
-        hercule.play("talk");
-        taper_espace++;
-        if(taper_espace == 9){
-            DIALOGUE = false;
-            hercule.play("stand");
-            musique_jardin.paused = false;
+    onKeyPress("space", () => {
+        if(DIALOGUE){
+            musique_jardin.paused = true;
+            hercule.play("talk");
+            taper_espace++;
+            if(taper_espace == 9){
+                DIALOGUE = false;
+                hercule.play("stand");
+                musique_jardin.paused = false;
+            };
+            return;
         };
-        return;
-    };
-    if(PAUSE){
-        musique_jardin.paused = true;
-        hercule.play("talk");
-        taper_espace_pause++;
-        if(taper_espace_pause == 9){
-            PAUSE = false;
-            hercule.play("stand");
-            musique_jardin.paused = false;
+        if(PAUSE){
+            musique_jardin.paused = true;
+            hercule.play("talk");
+            taper_espace_pause++;
+            if(taper_espace_pause == 9){
+                PAUSE = false;
+                hercule.play("stand");
+                musique_jardin.paused = false;
+            };
+            return;
         };
-        return;
-    };
-        // mode jeu
-    if(hercule.perdUneVie) return;
-    if(hercule.curAnim != "jump"){
-        hercule.play("jump");
-    };
-    if(hercule.isGrounded()){
-        hercule.jump(1000);
-    };
-    const son_jump = play('saut', {
-        volume: 0.7
+            // mode jeu
+        if(hercule.perdUneVie) return;
+        if(hercule.curAnim != "jump"){
+            hercule.play("jump");
+        };
+        if(hercule.isGrounded()){
+            hercule.jump(1000);
+        };
+        const son_jump = play('saut', {
+            volume: 0.7
+        });
     });
-  });
-  onKeyRelease("space", () => {
-    hercule.play("stand");
-  });
+    onKeyRelease("space", () => {
+        hercule.play("stand");
+    });
   
     
     // caméra fixée sur Hercule, mais seulement quand il marche (pas quand il saute)
-hercule.onUpdate(() => {
-    if(hercule.pos.x > 7900 && !feu_end){
-        feu_end = true;
-    };
-    if(!DIALOGUE){
-        if(hercule.isGrounded()){
-            setCamPos(hercule.pos.x, hercule.pos.y - 170);
-        } else {
-            camPos(hercule.pos.x, camPos().y);
+    hercule.onUpdate(() => {
+        if(hercule.pos.x > 7900 && !feu_end){
+            feu_end = true;
         };
-        if(!hercule.curAnim()){
-            hercule.play("stand")
+        if(!DIALOGUE){
+            if(hercule.isGrounded()){
+                setCamPos(hercule.pos.x, hercule.pos.y - 170);
+            } else {
+                camPos(hercule.pos.x, camPos().y);
+            };
+            if(!hercule.curAnim()){
+                hercule.play("stand")
+            };
         };
-    };
-        // lorsqu'il y a la première chouette en stock, pause narrative/explicative
+            // lorsqu'il y a la première chouette en stock, pause narrative/explicative
         if(stock_chouettes == 1 && !begin_pause){
             PAUSE = true;
             begin_pause = true;
@@ -315,12 +302,11 @@ hercule.onUpdate(() => {
             ], true, {x:camPos().x, y:camPos().y + 30});
         };
 
-    // si Hercule est sorti de la zone de feu, alors pause narrative
-        if (hercule.pos.x > 8300 && !begin_dialogue){
+        // si Hercule est sorti de la zone de feu, alors pause narrative
+        if(hercule.pos.x > 8300 && !begin_dialogue){
             DIALOGUE = true;
             begin_dialogue = true;
 
-            //onButtonPress('space',  ( ) => {loquace.next({x:camPos().x, y:camPos().y + 30})});
             loquace.script([
                 "Grâce à toi, j'ai réussi à échapper aux flammes du dragon Ladon!",
                 "J'ai récolté assez de pommes d'or pour Eurysthée.",
@@ -331,9 +317,9 @@ hercule.onUpdate(() => {
                 "Heureusement qu'il y a Minerve! Une chouette peut voler très vite et voir très loin. C'est une chasseuse redoutable!",
                 "Une fois que Nérée sera redevenu humain, je pourrai l'attraper.",
                 "Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
-             ], true, {x:camPos().x, y:camPos().y + 30});
-            };
-        // lorsque Nérée est dans le champ de vision d'Hercule, le logo de la chouette s'anime pour nous inciter à utiliser la chouette
+            ], true, {x:camPos().x, y:camPos().y + 30});
+        };
+            // lorsque Nérée est dans le champ de vision d'Hercule, le logo de la chouette s'anime pour nous inciter à utiliser la chouette
         if(hercule.pos.x > 8500 && tete_chouette.curAnim() != "bounce"){
             tete_chouette.play("bounce");
         };
@@ -341,75 +327,75 @@ hercule.onUpdate(() => {
     
 
 // collision Hercule - pomme
-hercule.onCollide('pomme', (pomme) => {
-    const son_plus_un = play('plus un',{
-        volume: 0.5,
-    });
-    score_pommes += 1; // on met à jour le nombre de pommes récoltées
-    compteur_pommes.text = score_pommes; // le compteur affiche le nombre de pommes récoltées
+    hercule.onCollide('pomme', (pomme) => {
+        const son_plus_un = play('plus un',{
+            volume: 0.5,
+        });
+        score_pommes += 1; 
+        compteur_pommes.text = score_pommes;
 
-    if(score_pommes % 10 == 0){ // chaque fois qu'Hercule récolte 30 pommes, une chouette est ajoutée au stock
-        stock_chouettes += 1;
-        compteur_chouettes.text = stock_chouettes;
-    };
+        if(score_pommes % 10 == 0){ // chaque fois qu'Hercule récolte 30 pommes, une chouette est ajoutée au stock
+            stock_chouettes += 1;
+            compteur_chouettes.text = stock_chouettes;
+        };
 
-    const plus_un = add([ // on affiche +1 à chaque pomme récoltée
-        text('+1', {size: 28}),
-        pos(pomme.pos.x, pomme.pos.y -10),
-        anchor("center"),
-        color(YELLOW),
-        move(UP, 50),
-    ]);
-    wait(0.25, () => {
-        plus_un.destroy();
+        const plus_un = add([ // on affiche +1 à chaque pomme récoltée
+            text('+1', {size: 28}),
+            pos(pomme.pos.x, pomme.pos.y -10),
+            anchor("center"),
+            color(YELLOW),
+            move(UP, 50),
+        ]);
+        wait(0.25, () => {
+            plus_un.destroy();
+        });
+        destroy(pomme);
     });
-    destroy(pomme);
-});
 
 // collision Hercule - boule de feu
-let total_boules_de_feu = 0;
+    let total_boules_de_feu = 0;
 
-hercule.onCollide('feu', (feu) => {
-    total_boules_de_feu += 1;
-    if(total_boules_de_feu < 3){ // pour les 2 premières boules de feu, son d'impact; pour la dernière, son game over (voir infra)
-        const son = play('hit', {
-            volume: 0.6,
-        }); 
-    };
+    hercule.onCollide('feu', (feu) => {
+        total_boules_de_feu += 1;
+        if(total_boules_de_feu < 3){ // pour les 2 premières boules de feu, son d'impact; pour la dernière, son game over (voir infra)
+            const son = play('hit', {
+                volume: 0.6,
+            }); 
+        };
 
-    if(coeurs.length > 0){ // on enlève une vie au compteur
-        destroy(coeurs.pop());
-    }; 
-    
-    if(hercule.perdUneVie) return; // Hercule perd une vie, donc il devient rouge
-    hercule.perdUneVie = true;
-    hercule.play("burn");
-    destroy(feu);
+        if(coeurs.length > 0){ // on enlève une vie au compteur
+            destroy(coeurs.pop());
+        }; 
+        
+        if(hercule.perdUneVie) return; // Hercule perd une vie, donc il devient rouge
+        hercule.perdUneVie = true;
+        hercule.play("burn");
+        destroy(feu);
 
-    if(coeurs.length == 0){ // s'il n'y a plus de vies, alors game over
-        const son = play('game over', {
-            volume: 0.6,
+        if(coeurs.length == 0){ // s'il n'y a plus de vies, alors game over
+            const son = play('game over', {
+                volume: 0.6,
+            });
+            musique_jardin.stop();
+            go('game over');
+        };
+
+        wait(0.25, () => { // après 0.25 sec, Hercule peut de nouveau s'animer
+            hercule.perdUneVie = false;
+                hercule.play("stand");
+            });
         });
-        musique_jardin.stop();
-        go('game over');
-    };
 
-    wait(0.25, () => { // après 0.25 sec, Hercule peut de nouveau s'animer
-        hercule.perdUneVie = false;
-            hercule.play("stand");
-        });
-    });
-
-// ajouter Nérée qui se transforme en serpent
-const neree = add([
-    sprite('Neree'),
-    pos(9000, 466),
-    scale(2),
-    anchor("bot"),
-    body(),
-    area({shape: new Rect(vec2(0,-3),40,50)}),
-    'neree',
-]);
+// NÉRÉE
+    const neree = add([
+        sprite('Neree'),
+        pos(9000, 466),
+        scale(2),
+        anchor("bot"),
+        body(),
+        area({shape: new Rect(vec2(0,-3),40,50)}),
+        'neree',
+    ]);
 
     // Nérée est immobile et face à Hercule
     neree.play("stand");
@@ -419,32 +405,32 @@ const neree = add([
     
     neree.onUpdate(() => {
         if(!seuil && (hercule.pos.x < neree.pos.x && hercule.pos.x > neree.pos.x - 300)){
-            seuil = true; // on a atteint le seuil
-                neree.flipX = false;
+            seuil = true;
+            neree.flipX = false;
+            neree_avance = true;
+            neree.play("walk");
+            play("rire", {
+                volume: 0.4,
+                loop: false,
+            });
+            wait(1, () => {
                 neree_avance = true;
-                neree.play("walk");
-                play("rire", {
-                    volume: 0.4,
-                    loop: false,
-                });
-                wait(2, () => { // Nérée se métamorphose après 2 secondes de marche
-                    neree_avance = true;
-                    neree.play("metamorphose");
-                });
-                neree.onAnimEnd((anim) => { // Nérée se transforme en serpent et reste serpent
-                    if(anim == "metamorphose"){
-                        neree.play("serpent");
-                    };
-                });
+                neree.play("metamorphose");
+            });
+            neree.onAnimEnd((anim) => { // Nérée se transforme en serpent et reste serpent
+                if(anim == "metamorphose"){
+                    neree.play("serpent");
+                };
+            });
         };
         if(neree_avance){
-            neree.pos.x += 5; // vitesse de Nérée
+            neree.pos.x += 5;
         };
     });
 
     // collision Nérée - chouette (quand la chouette attrape le serpent, il redevient Nérée)
     neree.onCollide('chouette', (chouette) => {
-        neree_avance = false; // Nérée s'arrête
+        neree_avance = false;
         neree.play("stand");
         play("grognement",{
             volume: 2,
@@ -459,8 +445,6 @@ const neree = add([
         musique_jardin.stop();
         play('victoire');
     });
-
- 
-}); // fin de la scène
-}; // fin de la fonction
+});
+};
 

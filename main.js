@@ -1,12 +1,11 @@
-// KAPLAY ET SPRITES
-    // Importer les scènes
+// IMPORTATIONS (SCENES, KAPLAY, LOQUACE), INITIALISATIONS, SPRITES ET SOUNDS
+    
 import * as menu from "./scenes/1menu.js";
 import * as histoire from "./scenes/2histoire.js";
 import * as jeu from "./scenes/3jeu.js";
 import * as gameover from "./scenes/4gameover.js";
 import * as win from "./scenes/5win.js";
 
-    // Importer Kaplay et Loquace
 import kaplay from "https://unpkg.com/kaplay@3001.0.19/dist/kaplay.mjs";
 import {clear, loquacePlugin} from './loquace.js';
 kaplay({
@@ -21,27 +20,24 @@ kaplay({
 });
 loquace.init();
 
-    // commandes Loquace
 loquace.registerCommand('scene_jardin', () => {
         go('jardin');
     });
 
 
-    // Initialiser les scènes
 menu.init();
 histoire.init();
 jeu.init();
 gameover.init();
 win.init();
 
-    // Aller au menu (scène 1)
-go('jardin');
 
-    // Ajouter de la gravité (pour les scènes suivantes)
-setGravity(2400);
+go('menu');
+
+    
+setGravity(2400); // gravité (pour les scènes suivantes)
 
 
-    // Charger les sprites
 loadSprite('titre', '/assets/Titre_Final.png');
 loadSprite('jardin', '/assets/Jardin_Hesperides.png');
 loadSprite('sortie jardin', '/assets/Jardin_Sortie.png');
@@ -95,7 +91,7 @@ loadSprite('Hercule', '/assets/Hercule_Animations.png', {
     },
 });
 
-    // Charger les sons
+
 loadSound('plus un', '/sounds/coin1.wav');
 loadSound('saut', '/sounds/jump_11.wav');
 loadSound('hit', '/sounds/death.wav');

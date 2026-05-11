@@ -1,12 +1,28 @@
 // SCÈNE GAGNÉ
 export function init(){
     scene('win', () => {
-        setBackground(0,0,0); // fond noir
-        // décor
+        setBackground(BLACK);
         const jardin = add([
             sprite('sortie jardin'),
         ]);
+        
+        const ligne = add([ // ligne de gravité
+            rect(100000, 2),
+            area(),
+            body({isStatic: true}),
+            pos(0, 550),
+            opacity(0),
+        ]);
 
+        const hercule = add([
+            sprite('Hercule', {frame:7}),
+            pos(400, 550),
+            scale(2.5),
+            anchor("bot"),
+            body(),
+            area(),
+        ]);
+        
         const bravo = add([
             text('Bravo!\nGrâce à toi, Hercule a réussi\nà sortir du Jardin des Hespérides!', 
                 {size:28, align:"center", lineSpacing:20}),
@@ -21,31 +37,9 @@ export function init(){
                 anchor("center"),
             ]);
         });
-        // quand on appuie sur espace, on retourne au menu
+
         onKeyPress('space', () => {
             go('menu');
         });
-
-        // ligne pour la gravité
-        const ligne = add([
-            rect(100000, 2),
-            area(),
-            body({isStatic: true}),
-            pos(0, 550),
-            opacity(0),
-        ]);
-
-        // Hercule
-        const hercule = add([
-            sprite('Hercule', {frame:7}),
-            pos(400, 550),
-            scale(2.5),
-            anchor("bot"),
-            body(),
-            area(),
-        ]);
-
-
-    
-    }); // fin de la scène
-}; // fin de la fonction
+    }); 
+};

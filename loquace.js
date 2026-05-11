@@ -223,7 +223,7 @@ function next(camPos={x:0,y:0}) {
   }
 
   // First remove any existing dialog
-  play("click", {volume: 0.6 });
+  play("click", {volume: 0.9 });
   clear();
 
   // Parse statement

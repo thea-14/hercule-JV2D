@@ -1,4 +1,5 @@
 // SCÈNE MENU
+
 export function init(){
     scene('menu', () => {
         onKeyPress("f", (c) => {
@@ -11,41 +12,26 @@ export function init(){
             pos(500, 350),
             anchor('center'),
         ]);
-    // ajouter du texte
-    const texte = add([
-        text('Appuie sur "espace" pour commencer le jeu', {
-            size: 20,
-        }),
-        color(YELLOW),
-        pos(450, 400),
-        anchor('center'),
-    ]);
 
-    // // ajouter un bouton "JOUER"
-    // const bouton = add([
-    //     rect(300, 100),
-    //     pos (width()/2, height()/2 + 100),
-    //     anchor('center'),
-    //     color(YELLOW),
-    //     area(),
-    // ]);
-    // // ajouter du texte au bouton
-    // const texte_bouton = add([
-    //     text('JOUER (espace)', {
-    //         size: 24,
-    //     }),
-    //     color(BLACK),
-    //     pos(width()/2, height()/2 + 100),
-    //     anchor('center'),
-    // ]);
+        const texte_play = add([
+            text('Appuie sur "espace" pour commencer le jeu', {
+                size: 20,
+            }),
+            color(YELLOW),
+            pos(450, 400),
+            anchor('center'),
+        ]);
 
-    // ajouter un événement au bouton
-    onKeyPress('space', () => {
-        go('histoire');
-        //const musique = play("musique histoire");
+        const texte_fullscreen = add([
+            text('... et sur "f" pour jouer en plein écran!', {
+                size: 14,
+            }),
+            color(GREEN),
+            pos(250, 430),
+        ]);
+        
+        onKeyPress('space', () => {
+            go('histoire');
+        });
     });
-    
-    
-
-}); // fin de la scène
-}; // fin de la fonction
+}; 
