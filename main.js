@@ -38,13 +38,13 @@ go('menu');
 setGravity(2400); // gravité (pour les scènes suivantes)
 
 
-loadSprite('titre', '/assets/Titre_Final.png');
-loadSprite('jardin', '/assets/Jardin_Hesperides.png');
-loadSprite('sortie jardin', '/assets/Jardin_Sortie.png');
-loadSprite('pomme', '/assets/pomme_feuilles.png');
-loadSprite('pomme entière', '/assets/Pomme.png');
-loadSprite('coeur', '/assets/Coeur.png');
-loadSprite('tête chouette', '/assets/chouette_tete.png', {
+loadSprite('titre', 'assets/Titre_Final.png');
+loadSprite('jardin', 'assets/Jardin_Hesperides.png');
+loadSprite('sortie jardin', 'assets/Jardin_Sortie.png');
+loadSprite('pomme', 'assets/pomme_feuilles.png');
+loadSprite('pomme entière', 'assets/Pomme.png');
+loadSprite('coeur', 'assets/Coeur.png');
+loadSprite('tête chouette', 'assets/chouette_tete.png', {
     sliceX: 4,
     sliceY: 1,
     anims:{
@@ -52,14 +52,14 @@ loadSprite('tête chouette', '/assets/chouette_tete.png', {
         "bounce":{from:0, to:3, loop:true},
     },
 });
-loadSprite('chouette', '/assets/Chouette.png', {
+loadSprite('chouette', 'assets/Chouette.png', {
     sliceX: 4,
     sliceY: 1,
     anims:{
         "fly":{from:0, to:3, loop:true},
     },
 });
-loadSprite('Neree', '/assets/Neree_Animations.png', {
+loadSprite('Neree', 'assets/Neree_Animations.png', {
     sliceX: 6,
     sliceY: 1,
     anims:{
@@ -69,14 +69,14 @@ loadSprite('Neree', '/assets/Neree_Animations.png', {
         serpent:{from:4, to:5, loop:true},
         },
 });
-loadSprite('boule de feu', '/assets/Boule_Feu.png', {
+loadSprite('boule de feu', 'assets/Boule_Feu.png', {
     sliceX: 2,
     sliceY: 1,
     anims:{
         "move":{from: 0, to: 1, loop: true},
     },
 });
-loadSprite('Hercule', '/assets/Hercule_Animations.png', {
+loadSprite('Hercule', 'assets/Hercule_Animations.png', {
     sliceX: 8,
     sliceY: 1,
     anims:{
@@ -92,15 +92,15 @@ loadSprite('Hercule', '/assets/Hercule_Animations.png', {
 });
 
 
-loadSound('plus un', '/sounds/coin1.wav');
-loadSound('saut', '/sounds/jump_11.wav');
-loadSound('hit', '/sounds/death.wav');
-loadSound('game over', '/sounds/round_end.wav');
-loadSound('musique jardin', '/sounds/sunnyday.wav');
-loadSound('musique histoire', '/sounds/relaxing_music.mp3');
-loadSound('fly', '/sounds/bird_flapping.wav');
-loadSound('victoire', '/sounds/Victory.wav');
-loadSound('chouette contre feu', '/sounds/SoundEnemyDeath.wav');
-loadSound('click', '/sounds/click_sound_5.mp3');
-loadSound('rire', '/sounds/evil_laugh.mp3');
-loadSound('grognement', '/sounds/monster-5.wav');
+loadSound('plus un', 'sounds/coin1.wav');
+loadSound('saut', 'sounds/jump_11.wav');
+loadSound('hit', 'sounds/death.wav');
+loadSound('game over', 'sounds/round_end.wav');
+loadSound('musique jardin', 'sounds/sunnyday.wav');
+loadSound('musique histoire', 'sounds/relaxing_music.mp3');
+loadSound('fly', 'sounds/bird_flapping.wav');
+loadSound('victoire', 'sounds/Victory.wav');
+loadSound('chouette contre feu', 'sounds/SoundEnemyDeath.wav');
+loadSound('click', 'sounds/click_sound_5.mp3');
+loadSound('rire', 'sounds/evil_laugh.mp3');
+loadSound('grognement', 'sounds/monster-5.wav');
