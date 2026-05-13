@@ -7,8 +7,6 @@ Ce jeu permet d'incarner Hercule au Jardin des Hespérides. Il doit sauter pour 
 ## Librairie de jeu utilisée
 Ce jeu a été développé avec [Kaplay](https://kaplayjs.com/).
 
-![alt-text Logo Kaplay](kaplay.gif)
-
 ## Comment jouer?
 Téléchargez l'archive `hercule-JV2D`, décompressez-là et ouvrez le dossier dans VSCode. Ouvrez le fichier `index.html`avec _Live Server_.
 ## Attributions
