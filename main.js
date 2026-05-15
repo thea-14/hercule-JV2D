@@ -32,7 +32,7 @@ gameover.init();
 win.init();
 
 
-go('menu');
+go('jardin');
 
     
 setGravity(2400); // gravité (pour les scènes suivantes)

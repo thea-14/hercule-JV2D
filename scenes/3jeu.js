@@ -191,6 +191,7 @@ export function init(){
         area({shape: new Rect(vec2(0,-3),30,56)}),
         'hercule',
     ]);
+    console.log(hercule.area.shape);
     
     hercule.perdUneVie = false; // voir collision boule de feu
 
@@ -220,11 +221,12 @@ export function init(){
     onKeyDown("down", () => {
         if(hercule.perdUneVie) return;
         hercule.play("down");
+        hercule.area.shape = new Rect(vec2(0,-3),30,45);
     });
     onKeyRelease("down", () => {
-        hercule.play("stand")
+        hercule.play("stand");
+        hercule.area.shape = new Rect(vec2(0,-3),30,56);
     });
-
 
     // Hercule saute
         // mode dialogue
