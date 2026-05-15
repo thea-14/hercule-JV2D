@@ -28,10 +28,12 @@ Tous les dessins ont été réalisés par moi-même (@thea-14) sur [Piskel](http
 
 ### Fichier `loquace.js`
 Les modifications apportées au fichier `loquace.js` sont de ColinLug, sauf le son "click" qui est un ajout de ma part.
+
 ## Recours aux LLMs
 Aucun code ni partie de code n'a été généré par un LLM. En revanche, ChatGPT a été utilisé de façon ponctuelle pour réparer des bugs et répondre à des questions de syntaxe.
+
 ## Contexte de développement
-Ce jeu a été développé dans le cadre du cours "Développement de jeux vidéo 2D" donné par Loïc Cattani au semestre de printemps 2026 à l'Université de Lausanne.
+Ce jeu a été développé dans le cadre du cours "Développement de jeux vidéo 2D", dispensé par Loïc Cattani au semestre de printemps 2026 à l'Université de Lausanne.
 
 ## Remerciements
 À Loïc Cattani et Isaac Pante pour leur encadrement et conseils, en présence ou à distance. Un grand merci à Colin pour sa disponibilité et son aide généreuse, ce jeu lui doit beaucoup.
