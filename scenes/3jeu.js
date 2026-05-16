@@ -191,7 +191,6 @@ export function init(){
         area({shape: new Rect(vec2(0,-3),30,56)}),
         'hercule',
     ]);
-    console.log(hercule.area.shape);
     
     hercule.perdUneVie = false; // voir collision boule de feu
 
