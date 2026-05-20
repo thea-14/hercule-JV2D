@@ -4,8 +4,12 @@ Ce jeu permet d'incarner Hercule au Jardin des Hespérides. Il doit sauter pour 
 
 ![alt-text Hercule est dans le jardin, face à une boule de feu.](Screenshot_game.png)
 
+## Références historiques
+La narration de ce jeu se base sur les _Métamorphoses_ d'Ovide (livre IX) et la _Bibliothèque_ d'Apollodore: le premier relate la vie d'Hercule après les Douze Travaux, le second raconte en détail ces derniers.
+
+
 ## Librairie de jeu utilisée
-Ce jeu a été développé avec [Kaplay](https://kaplayjs.com/).
+Ce jeu a été développé avec [Kaplay](https://kaplayjs.com/), "the fun and open source game library for HTML5 games".
 
 ## Comment jouer?
 Téléchargez l'archive `hercule-JV2D`, décompressez-là et ouvrez le dossier dans VSCode. Ouvrez le fichier `index.html`avec _Live Server_.

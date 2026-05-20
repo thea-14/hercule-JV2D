@@ -15,8 +15,8 @@ kaplay({
     buttons: {
         space: {
         keyboard: ["space"],
+        },
     },
-},
 });
 loquace.init();
 
