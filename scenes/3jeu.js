@@ -335,7 +335,7 @@ export function init(){
         score_pommes += 1; 
         compteur_pommes.text = score_pommes;
 
-        if(score_pommes % 10 == 0){ // chaque fois qu'Hercule récolte 30 pommes, une chouette est ajoutée au stock
+        if(score_pommes % 10 == 0){ // chaque fois qu'Hercule récolte 10 pommes, une chouette est ajoutée au stock
             stock_chouettes += 1;
             compteur_chouettes.text = stock_chouettes;
         };
