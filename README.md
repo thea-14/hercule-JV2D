@@ -12,7 +12,8 @@ La narration de ce jeu se base sur les _Métamorphoses_ d'Ovide (livre IX) et la
 Ce jeu a été développé avec [Kaplay](https://kaplayjs.com/), "the fun and open source game library for HTML5 games".
 
 ## Comment jouer?
-Téléchargez l'archive `hercule-JV2D`, décompressez-là et ouvrez le dossier dans VSCode. Ouvrez le fichier `index.html`avec _Live Server_.
+Pour une expérience de jeu en ligne, jouez directement sur [itch.io](https://thea-14.itch.io/pomdor). Sinon, téléchargez l'archive `hercule-JV2D`, décompressez-là et ouvrez le dossier dans VSCode. Ouvrez le fichier `index.html`avec _Live Server_.
+
 ## Attributions
 ### Assets graphiques
 Tous les dessins ont été réalisés par moi-même (@thea-14) sur [Piskel](https://www.piskelapp.com/).
