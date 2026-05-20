@@ -46,7 +46,7 @@ export function init(){
         onButtonPress('space', ( ) => {loquace.next({x:500, y:330})});
         
         loquace.script([
-            "Bonjour, je suis Hercule. Appuie sur la barre d'espace pour écouter mon histoire.",
+            "Bonjour, je suis Hercule. Appuie sur la barre espace pour écouter mon histoire.",
             "Tu tombes bien! J’ai justement besoin de ton aide pour m’aider à terminer mes Douze Travaux.",
             "Cela fait déjà plusieurs années que le roi Eurysthée m'a donné cette épreuve interminable...",
             "Tu te demandes sûrement comment je suis tombé sur ce tyran.",
@@ -61,7 +61,7 @@ export function init(){
             "Mais ne te fie pas aux apparences paisibles de ce jardin: il est rempli de dangers.",
             "Tout d'abord, il est gardé par un dragon. Il s'appelle Ladon et il est très féroce.",
             "Ensuite, je ne peux pas sortir du jardin seul... ",
-            "Il faut que je réussise à attraper Nérée.", 
+            "Il faut que je réussisse à attraper Nérée.", 
             "C'est un dieu marin qui se métamorphose en serpent pour échapper à ses ennemis.",
             "Nérée et moi, on ne s'aime pas trop.",
             "C'est lui qui m'a indiqué le chemin pour le Jardin des Hespérides.",

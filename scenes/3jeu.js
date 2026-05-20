@@ -314,7 +314,7 @@ export function init(){
                 "Il ne me reste plus qu'à attraper Nérée pour sortir du jardin.",
                 "Tu le reconnaîtras facilement: dès qu'il me verra, il se transformera en serpent.",
                 "Au premier abord, on dirait un vieux monsieur... mais c'est un dieu très malin!",
-                "Lorsqu'il se transformera en serpent, il sera trop rapide pour que je puisse l'attraper.",
+                "Lorsqu'il se métamorphosera en serpent, il sera trop rapide pour que je puisse l'attraper.",
                 "Heureusement qu'il y a Minerve! Une chouette peut voler très vite et voir très loin. C'est une chasseuse redoutable!",
                 "Une fois que Nérée sera redevenu humain, je pourrai l'attraper.",
                 "Ne perdons pas de temps! Je sens qu'il n'est pas loin...",
