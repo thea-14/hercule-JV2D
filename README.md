@@ -1,6 +1,6 @@
 # POMDOR
 ## Description
-Ce jeu permet d'incarner Hercule au Jardin des Hespérides. Il doit sauter pour cueillir des pommes et éviter des boules de feu.
+POMDOR permet d'incarner Hercule au Jardin des Hespérides. Il doit sauter pour cueillir des pommes et éviter des boules de feu. Les introductions et pauses narratives donnent toutes les indications nécessaires pour progresser dans le jeu: leur fonction est à la fois pratique et pédagogique.  
 
 ![alt-text Hercule est dans le jardin, face à une boule de feu.](Screenshot_game.png)
 
